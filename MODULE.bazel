@@ -4,7 +4,15 @@ module(
 )
 
 bazel_dep(
+    name = "rules_nixpkgs_core",
+    version = "0.10.0",
+)
+
+bazel_dep(
     name = "cgrindel_bazel_starlib",
     version = "0.18.1",
     dev_dependency = True,
 )
+
+non_module_deps = use_extension("//:non_module_deps.bzl", "non_module_deps")
+use_repo(non_module_deps, "nixpkgs_default")
