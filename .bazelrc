@@ -1,0 +1,2 @@
+# Tell Bazel that we are running on a Nix machine
+build --host_platform=@io_tweag_rules_nixpkgs//nixpkgs/platforms:host
