@@ -6,7 +6,7 @@ inputs:
     type: string
     required: true
     description: The path to a file that contains shell code or the actual shell code.
-  args:
+  options:
     type: string
 
 runs:
@@ -14,6 +14,6 @@ runs:
   steps:
     - shell: bash
       env:
-        RNS_ARGS: ${{ inputs.args }}
+        RNS_OPTS: ${{ inputs.options }}
         RNS_RUN: ${{ inputs.run }}
       run: ${GITHUB_ACTION_PATH}/tools/run_nix_shell

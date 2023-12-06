@@ -1,0 +1,11 @@
+sh_test(
+    name = "run_nix_shell_test",
+    srcs = ["run_nix_shell_test.sh"],
+    data = [
+        "//tools:run_nix_shell",
+    ],
+    deps = [
+        "@bazel_tools//tools/bash/runfiles",
+        "@cgrindel_bazel_starlib//shlib/lib:assertions",
+    ],
+)

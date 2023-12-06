@@ -13,7 +13,8 @@ fail() {
 # MARK - Arguments
 
 script="${RNS_RUN:-}"
-ghc_version="${RNS_GHC_VERSION:-}"
+
+# TODO(chuck): Process RNS_OPTS
 
 nix_shell_opts=()
 while (("$#")); do
