@@ -6,15 +6,14 @@ inputs:
     type: string
     required: true
     description: The path to a file that contains shell code or the actual shell code.
-  ghc_version:
+  args:
     type: string
-    description: The version of the GHC compiler to use.
 
 runs:
   using: composite
   steps:
     - shell: bash
       env:
-        RNS_GHC_VERSION: ${{ inputs.ghc_version }}
+        RNS_ARGS: ${{ inputs.args }}
         RNS_RUN: ${{ inputs.run }}
-      run: ${GITHUB_ACTION_PATH}/run_nix_shell "${RNS_RUN}"
+      run: ${GITHUB_ACTION_PATH}/tools/run_nix_shell
