@@ -1,0 +1,20 @@
+name: Run nix-shell scripts
+description: Executes shell scripts using nix-shell.
+
+inputs:
+  run:
+    type: string
+    required: true
+    description: The path to a file that contains shell code or the actual shell code.
+  ghc_version:
+    type: string
+    description: The version of the GHC compiler to use.
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        RNS_GHC_VERSION: ${{ inputs.ghc_version }}
+        RNS_RUN: ${{ inputs.run }}
+      run: ${GITHUB_ACTION_PATH}/run_nix_shell "${RNS_RUN}"
