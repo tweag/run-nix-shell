@@ -29,12 +29,6 @@ flake_lock="$(rlocation "${flake_lock_location}")" || \
 
 # MARK - Test
 
-# DEBUG BEGIN
-echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") PWD: ${PWD}" 
-echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") flake_lock: ${flake_lock}" 
-tree 
-# DEBUG END
-
 cat >shell.nix <<-EOF
 (import
   (
@@ -47,11 +41,6 @@ cat >shell.nix <<-EOF
   { src = ./.; }
 ).shellNix
 EOF
-
-# DEBUG BEGIN
-echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") shell.nix:" 
-cat >&2 shell.nix
-# DEBUG END
 
 "${run_nix_shell_sh}" 'echo "Hello, World!"'
 
