@@ -2,6 +2,7 @@ sh_test(
     name = "run_nix_shell_test",
     srcs = ["run_nix_shell_test.sh"],
     data = [
+        "//:flake_files",
         "//tools:run_nix_shell",
     ],
     # MacOS sandbox fails this test with the following error:

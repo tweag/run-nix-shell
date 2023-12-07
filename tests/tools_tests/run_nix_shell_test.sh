@@ -23,12 +23,34 @@ run_nix_shell_sh_location=run_nix_shell/tools/run_nix_shell.sh
 run_nix_shell_sh="$(rlocation "${run_nix_shell_sh_location}")" || \
   (echo >&2 "Failed to locate ${run_nix_shell_sh_location}" && exit 1)
 
+flake_lock_location=run_nix_shell/flake.lock
+flake_lock="$(rlocation "${flake_lock_location}")" || \
+  (echo >&2 "Failed to locate ${flake_lock_location}" && exit 1)
+
 # MARK - Test
 
 # DEBUG BEGIN
 echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") PWD: ${PWD}" 
-echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") TEST_TMPDIR: ${TEST_TMPDIR}" 
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") flake_lock: ${flake_lock}" 
+tree 
+# DEBUG END
 
+cat >shell.nix <<-EOF
+(import
+  (
+    let lock = builtins.fromJSON (builtins.readFile ${flake_lock}); in
+    fetchTarball {
+      url = "https://github.com/edolstra/flake-compat/archive/\${lock.nodes.flake-compat.locked.rev}.tar.gz";
+      sha256 = lock.nodes.flake-compat.locked.narHash;
+    }
+  )
+  { src = ./.; }
+).shellNix
+EOF
+
+# DEBUG BEGIN
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") shell.nix:" 
+cat >&2 shell.nix
 # DEBUG END
 
 "${run_nix_shell_sh}" 'echo "Hello, World!"'
