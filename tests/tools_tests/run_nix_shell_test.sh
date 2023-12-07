@@ -27,7 +27,7 @@ flake_lock_location=run_nix_shell/flake.lock
 flake_lock="$(rlocation "${flake_lock_location}")" || \
   (echo >&2 "Failed to locate ${flake_lock_location}" && exit 1)
 
-# MARK - Test
+# MARK - Setup
 
 cat >shell.nix <<-EOF
 (import
@@ -42,6 +42,29 @@ cat >shell.nix <<-EOF
 ).shellNix
 EOF
 
-"${run_nix_shell_sh}" 'echo "Hello, World!"'
+# MARK - Test
 
-fail "IMPLEMENT ME!"
+assert_msg="simple script"
+output="$( "${run_nix_shell_sh}" 'echo "Hello, World!"' )"
+assert_equal "Hello, World!" "${output}" "${assert_msg}"
+
+assert_msg="multi-line script"
+output="$( 
+"${run_nix_shell_sh}" '
+echo "Hello, World!"
+echo "Second Line"
+' 
+)"
+assert_match "Hello, World" "${output}" "${assert_msg}"
+assert_match "Second Line" "${output}" "${assert_msg}"
+
+assert_msg="path to script file"
+custom_script_path="./custom_script.sh"
+cat >"${custom_script_path}" <<-EOF
+#!/usr/bin/env bash
+set -o errexit -o nounset -o pipefail
+echo "Hello from custom script"
+EOF
+chmod +x "${custom_script_path}"
+output="$( "${run_nix_shell_sh}" "${custom_script_path}" )"
+assert_equal "Hello from custom script" "${output}" "${assert_msg}"

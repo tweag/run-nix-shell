@@ -41,6 +41,13 @@ if [[ -z "${script:-}" ]]; then
   fail "A script for a path to a file must be provided."
 fi
 
+# DEBUG BEGIN
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") =================" 
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") script: ${script}" 
+tree >&2
+set -x
+# DEBUG END
+
 # MARK - Execute script
 
 cmd=( nix-shell --pure )
