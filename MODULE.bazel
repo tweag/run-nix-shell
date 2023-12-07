@@ -14,5 +14,18 @@ bazel_dep(
     dev_dependency = True,
 )
 
-non_module_deps = use_extension("//:non_module_deps.bzl", "non_module_deps")
-use_repo(non_module_deps, "nixpkgs_default")
+nix_repo = use_extension(
+    "@rules_nixpkgs_core//extensions:repository.bzl",
+    "nix_repo",
+)
+nix_repo.file(
+    name = "file_nixpkgs",
+    file = "//:nixpkgs.nix",
+    file_deps = [
+        "//:flake.lock",
+    ],
+)
+use_repo(
+    nix_repo,
+    "file_nixpkgs",
+)

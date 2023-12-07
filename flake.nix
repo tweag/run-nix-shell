@@ -1,11 +1,18 @@
 {
   inputs = {
     # Track a specific tag on the nixpkgs repo.
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
 
     # The flake format itself is very minimal, so the use of this
     # library is common.
     flake-utils.url = "github:numtide/flake-utils";
+
+    # Library for working with tools that need default.nix and shell.nix.
+    # https://nixos.wiki/wiki/Flakes#Using_flakes_with_stable_Nix
+    flake-compat = {
+      url = "github:edolstra/flake-compat";
+      flake = false;
+    };
   };
 
   # Here we can define various kinds of "outputs": packages, tests, 

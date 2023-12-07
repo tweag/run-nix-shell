@@ -19,6 +19,18 @@ assertions_sh="$(rlocation "${assertions_sh_location}")" || \
   (echo >&2 "Failed to locate ${assertions_sh_location}" && exit 1)
 source "${assertions_sh}"
 
+run_nix_shell_sh_location=run_nix_shell/tools/run_nix_shell.sh
+run_nix_shell_sh="$(rlocation "${run_nix_shell_sh_location}")" || \
+  (echo >&2 "Failed to locate ${run_nix_shell_sh_location}" && exit 1)
+
 # MARK - Test
+
+# DEBUG BEGIN
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") PWD: ${PWD}" 
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") TEST_TMPDIR: ${TEST_TMPDIR}" 
+
+# DEBUG END
+
+"${run_nix_shell_sh}" 'echo "Hello, World!"'
 
 fail "IMPLEMENT ME!"
