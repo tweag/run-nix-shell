@@ -14,8 +14,6 @@ fail() {
 
 script="${RNS_RUN:-}"
 
-# TODO(chuck): Process RNS_OPTS
-
 nix_shell_opts=()
 while (("$#")); do
   case "${1}" in
@@ -36,6 +34,19 @@ while (("$#")); do
       ;;
   esac
 done
+
+# Look for any options passed via the RNS_OPTS environment variable.
+# Add them to the nix_shell_opts.
+if [[ -n "${RNS_OPTS:-}" ]]; then
+  # Parse the RNS_OPTS string.
+  while IFS=$'\0' read -r -d '' arg; do 
+    more_nix_shell_opts+=( "${arg}" ) 
+  done < <(xargs printf '%s\0' <<<"${RNS_OPTS}")
+  # Add to the nix_shell_opts if we found any
+  if [[ ${#more_nix_shell_opts[@]} ]]; then
+    nix_shell_opts+=( "${more_nix_shell_opts[@]}" )
+  fi
+fi
 
 if [[ -z "${script:-}" ]]; then
   fail "A script for a path to a file must be provided."
