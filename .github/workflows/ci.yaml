@@ -39,6 +39,8 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
       - uses: ./.github/actions/set_up_runner
+      - shell: bash
+        run: rm -f ./tests/integration_tests/integration_test.out
       - name: Execute simple
         uses: ./
         with:
