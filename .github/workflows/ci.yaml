@@ -14,11 +14,11 @@ concurrency:
 
 jobs:
   unit_tests:
-    name: Build & Test - Nixpkgs
+    name: Unit Tests
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-11]
+        os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout the repository
@@ -42,6 +42,18 @@ jobs:
         shell: bash
         run: |
           bazel test //...
+      - name: Execute simple
+        uses: ./
+        with:
+          run: |
+            echo "FIRST" > integration_test.out
+      - name: Confirm output
+        shell: bash
+        run: |
+          output="$(<integration_test.out)"
+          [[ "${output}" == "FIRST" ]] || \
+            (echo >&2 "FIRST was not found"; exit 1)
+
 
   all_ci_tests:
     runs-on: ubuntu-latest
