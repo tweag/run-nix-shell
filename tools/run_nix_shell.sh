@@ -54,6 +54,11 @@ fi
 
 # MARK - Execute script
 
+# DEBUG BEGIN
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") =======" 
+ls -l >&2
+# DEBUG END
+
 cmd=( nix-shell --pure )
 if [[ ${#nix_shell_opts[@]} -gt 0 ]]; then
   cmd+=( "${nix_shell_opts[@]}" )
