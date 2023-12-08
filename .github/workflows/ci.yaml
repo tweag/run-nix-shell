@@ -53,7 +53,7 @@ jobs:
       - name: Confirm output
         shell: bash
         run: |
-          output="$(<integration_test.out)"
+          output="$(<./tests/integration_tests/integration_test.out)"
           expected="$(cat <<-EOF
           FIRST
           true
