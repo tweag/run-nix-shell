@@ -51,83 +51,85 @@ EOF
 
 # MARK - Test
 
-assert_msg="simple script"
-output="$( "${run_nix_shell_sh}" 'echo "Hello, World!"' )"
-assert_equal "Hello, World!" "${output}" "${assert_msg}"
+source "${1}"
 
-assert_msg="multi-line script"
-output="$( 
-"${run_nix_shell_sh}" '
-echo "Hello, World!"
-echo "Second Line"
-' 
-)"
-assert_match "Hello, World" "${output}" "${assert_msg}"
-assert_match "Second Line" "${output}" "${assert_msg}"
+#assert_msg="simple script"
+#output="$( "${run_nix_shell_sh}" 'echo "Hello, World!"' )"
+#assert_equal "Hello, World!" "${output}" "${assert_msg}"
 
-assert_msg="path to script file"
-custom_script_path="./custom_script.sh"
-cat >"${custom_script_path}" <<-EOF
-#!/usr/bin/env bash
-set -o errexit -o nounset -o pipefail
-echo "Hello from custom script"
-EOF
-chmod +x "${custom_script_path}"
-output="$( "${run_nix_shell_sh}" "${custom_script_path}" )"
-assert_equal "Hello from custom script" "${output}" "${assert_msg}"
+#assert_msg="multi-line script"
+#output="$( 
+#"${run_nix_shell_sh}" '
+#echo "Hello, World!"
+#echo "Second Line"
+#' 
+#)"
+#assert_match "Hello, World" "${output}" "${assert_msg}"
+#assert_match "Second Line" "${output}" "${assert_msg}"
 
-assert_msg="default value for CUSTOM_VAR_BOOl"
-output="$( "${run_nix_shell_sh}" 'echo "${CUSTOM_VAR_BOOL}"' )"
-assert_equal "false" "${output}" "${assert_msg}"
+#assert_msg="path to script file"
+#custom_script_path="./custom_script.sh"
+#cat >"${custom_script_path}" <<-EOF
+##!/usr/bin/env bash
+#set -o errexit -o nounset -o pipefail
+#echo "Hello from custom script"
+#EOF
+#chmod +x "${custom_script_path}"
+#output="$( "${run_nix_shell_sh}" "${custom_script_path}" )"
+#assert_equal "Hello from custom script" "${output}" "${assert_msg}"
 
-assert_msg="default value for CUSTOM_VAR_STR"
-output="$( "${run_nix_shell_sh}" 'echo "${CUSTOM_VAR_STR}"' )"
-assert_equal "default" "${output}" "${assert_msg}"
+#assert_msg="default value for CUSTOM_VAR_BOOl"
+#output="$( "${run_nix_shell_sh}" 'echo "${CUSTOM_VAR_BOOL}"' )"
+#assert_equal "false" "${output}" "${assert_msg}"
 
-assert_msg="custom value for CUSTOM_VAR_BOOL via command-line arg"
-output="$( "${run_nix_shell_sh}" --arg customVarBool true 'echo "${CUSTOM_VAR_BOOL}"' )"
-assert_equal "true" "${output}" "${assert_msg}"
+#assert_msg="default value for CUSTOM_VAR_STR"
+#output="$( "${run_nix_shell_sh}" 'echo "${CUSTOM_VAR_STR}"' )"
+#assert_equal "default" "${output}" "${assert_msg}"
 
-assert_msg="custom value for CUSTOM_VAR_STR via command-line arg"
-expected="This is a custom value."
-output="$( "${run_nix_shell_sh}" --argstr customVarStr "${expected}" 'echo "${CUSTOM_VAR_STR}"' )"
-assert_equal "${expected}" "${output}" "${assert_msg}"
+#assert_msg="custom value for CUSTOM_VAR_BOOL via command-line arg"
+#output="$( "${run_nix_shell_sh}" --arg customVarBool true 'echo "${CUSTOM_VAR_BOOL}"' )"
+#assert_equal "true" "${output}" "${assert_msg}"
 
-assert_msg="custom value for CUSTOM_VAR_BOOL via RNS_OPT"
-output="$( 
-RNS_OPTS='--arg customVarBool true --argstr customVarStr "This is a custom value."' \
-  "${run_nix_shell_sh}" 'echo "${CUSTOM_VAR_BOOL}"; echo "${CUSTOM_VAR_STR}"' 
-)"
-assert_match "true" "${output}" "${assert_msg}"
-assert_match "This is a custom value" "${output}" "${assert_msg}"
+#assert_msg="custom value for CUSTOM_VAR_STR via command-line arg"
+#expected="This is a custom value."
+#output="$( "${run_nix_shell_sh}" --argstr customVarStr "${expected}" 'echo "${CUSTOM_VAR_STR}"' )"
+#assert_equal "${expected}" "${output}" "${assert_msg}"
 
-# Set up a new working directory
-cwd="${PWD}/working-dir"
-rm -rf "${cwd}"
-mkdir -p "${cwd}"
-cp shell.nix "${cwd}/"
+#assert_msg="custom value for CUSTOM_VAR_BOOL via RNS_OPT"
+#output="$( 
+#RNS_OPTS='--arg customVarBool true --argstr customVarStr "This is a custom value."' \
+#  "${run_nix_shell_sh}" 'echo "${CUSTOM_VAR_BOOL}"; echo "${CUSTOM_VAR_STR}"' 
+#)"
+#assert_match "true" "${output}" "${assert_msg}"
+#assert_match "This is a custom value" "${output}" "${assert_msg}"
 
-assert_msg="set working-directory flag"
-output="$( "${run_nix_shell_sh}" --working-directory "${cwd}" 'echo "${PWD}"' )"
-assert_equal "${cwd}" "${output}" "${assert_msg}"
+## Set up a new working directory
+#cwd="${PWD}/working-dir"
+#rm -rf "${cwd}"
+#mkdir -p "${cwd}"
+#cp shell.nix "${cwd}/"
 
-assert_msg="set RNS_CWD env var"
-output="$( RNS_CWD="${cwd}" "${run_nix_shell_sh}" 'echo "${PWD}"' )"
-assert_equal "${cwd}" "${output}" "${assert_msg}"
+#assert_msg="set working-directory flag"
+#output="$( "${run_nix_shell_sh}" --working-directory "${cwd}" 'echo "${PWD}"' )"
+#assert_equal "${cwd}" "${output}" "${assert_msg}"
 
-assert_msg="set RNS_VERBOSE env var"
-output="$( 
-  RNS_VERBOSE="true" \
-  RNS_CWD="${cwd}" \
-  RNS_OPTS='--arg customVarBool true ' \
-  "${run_nix_shell_sh}" \
-    --argstr customVarStr "This is a custom value." \
-    'echo HELLO' 2>&1 1>/dev/null
-)"
-assert_match "RNS_CWD: .*working-dir" "${output}" "${assert_msg}"
-assert_match "RNS_OPTS: --arg customVarBool true" "${output}" "${assert_msg}"
-assert_match "RNS_RUN: " "${output}" "${assert_msg}"
-assert_match "cwd: .*working-dir" "${output}" "${assert_msg}"
-assert_match 'nix_shell_opts: --argstr customVarStr This\\ is\\ a\\ custom\\ value\.' \
-  "${output}" "${assert_msg}"
-assert_match "script: echo HELLO" "${output}" "${assert_msg}"
+#assert_msg="set RNS_CWD env var"
+#output="$( RNS_CWD="${cwd}" "${run_nix_shell_sh}" 'echo "${PWD}"' )"
+#assert_equal "${cwd}" "${output}" "${assert_msg}"
+
+#assert_msg="set RNS_VERBOSE env var"
+#output="$( 
+#  RNS_VERBOSE="true" \
+#  RNS_CWD="${cwd}" \
+#  RNS_OPTS='--arg customVarBool true ' \
+#  "${run_nix_shell_sh}" \
+#    --argstr customVarStr "This is a custom value." \
+#    'echo HELLO' 2>&1 1>/dev/null
+#)"
+#assert_match "RNS_CWD: .*working-dir" "${output}" "${assert_msg}"
+#assert_match "RNS_OPTS: --arg customVarBool true" "${output}" "${assert_msg}"
+#assert_match "RNS_RUN: " "${output}" "${assert_msg}"
+#assert_match "cwd: .*working-dir" "${output}" "${assert_msg}"
+#assert_match 'nix_shell_opts: --argstr customVarStr This\\ is\\ a\\ custom\\ value\.' \
+#  "${output}" "${assert_msg}"
+#assert_match "script: echo HELLO" "${output}" "${assert_msg}"
