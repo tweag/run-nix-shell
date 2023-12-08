@@ -17,3 +17,10 @@ runs:
         cat >>.bazelrc.local <<EOF
         common --config=ci
         EOF
+    - name: Configure MacOS
+      if: ${{ runner.os == 'macOS' }}
+      shell: bash
+      run: |
+        cat >>.bazelrc.local <<EOF
+        common --config=macos_ci
+        EOF

@@ -5,6 +5,10 @@ build --enable_bzlmod
 common:ci --announce_rc
 test:ci --test_output=errors --test_summary=terse
 
+# MacOS CI Configuration
+# ----------------------
+common:macos_ci --jobs=2
+
 # Remote Cache Authentication
 # ---------------------------
 try-import %workspace%/.bazelrc.auth
