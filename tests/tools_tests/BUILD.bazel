@@ -1,21 +1,5 @@
 load(":run_nix_shell_test.bzl", "run_nix_shell_test")
 
-# sh_test(
-#     name = "run_nix_shell_test",
-#     srcs = ["run_nix_shell_test.sh"],
-#     data = [
-#         "//:flake_files",
-#         "//tools:run_nix_shell",
-#     ],
-#     # MacOS sandbox fails this test with the following error:
-#     #   sandbox-exec: sandbox_apply: Operation not permitted
-#     tags = ["no-sandbox"],
-#     deps = [
-#         "@bazel_tools//tools/bash/runfiles",
-#         "@cgrindel_bazel_starlib//shlib/lib:assertions",
-#     ],
-# )
-
 run_nix_shell_test(name = "simple_script_test")
 
 run_nix_shell_test(name = "multi_line_script_test")

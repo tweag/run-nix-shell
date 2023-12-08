@@ -8,7 +8,6 @@ def run_nix_shell_test(name, test_file = None, **kwargs):
         srcs = [test_file],
     )
 
-    # lib_name_target = ":" + lib_name
     native.sh_test(
         name = name,
         srcs = ["@run_nix_shell//tests/tools_tests:run_nix_shell_test_runner.sh"],
