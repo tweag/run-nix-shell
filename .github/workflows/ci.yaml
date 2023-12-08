@@ -24,6 +24,8 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
       - uses: ./.github/actions/set_up_runner
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Execute Bazel tests
         shell: bash
         run: bazel test //...
@@ -39,6 +41,8 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
       - uses: ./.github/actions/set_up_runner
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Execute simple
         uses: ./
         with:
