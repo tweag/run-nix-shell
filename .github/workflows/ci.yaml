@@ -43,6 +43,8 @@ jobs:
         run: |
           bazel test //...
       - name: Execute simple
+        env:
+          GITHUB_ACTION_PATH: .
         uses: ./
         with:
           run: |
