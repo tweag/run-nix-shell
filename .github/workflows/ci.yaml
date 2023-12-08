@@ -41,15 +41,27 @@ jobs:
       - uses: ./.github/actions/set_up_runner
       - name: Execute simple
         uses: ./
+        working-directory: ./tests/integration_tests
         with:
-          run: echo "FIRST" > integration_test.out
+          options: |
+            --arg customVarArg true
+            --argstr customVarStr "Hello, World!"
+          run: |
+            echo "FIRST" > integration_test.out
+            echo "${CUSTOM_VAR_BOOL}" >> integration_test.out
+            echo "${CUSTOM_VAR_STR}" >> integration_test.out
       - name: Confirm output
         shell: bash
         run: |
           output="$(<integration_test.out)"
-          [[ "${output}" == "FIRST" ]] || \
-            (echo >&2 "FIRST was not found"; exit 1)
-
+          expected="$(cat <<-EOF
+          FIRST
+          true
+          Hello, World!
+          EOF
+          )"
+          [[ "${output}" == "${expected}" ]] || \
+            (echo >&2 "Ouptput from integration test does not match:" "${output}"; exit 1)
 
   all_ci_tests:
     runs-on: ubuntu-latest
