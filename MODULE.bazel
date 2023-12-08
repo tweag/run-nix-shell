@@ -13,19 +13,3 @@ bazel_dep(
     version = "0.18.1",
     dev_dependency = True,
 )
-
-nix_repo = use_extension(
-    "@rules_nixpkgs_core//extensions:repository.bzl",
-    "nix_repo",
-)
-nix_repo.file(
-    name = "file_nixpkgs",
-    file = "//:nixpkgs.nix",
-    file_deps = [
-        "//:flake.lock",
-    ],
-)
-use_repo(
-    nix_repo,
-    "file_nixpkgs",
-)
