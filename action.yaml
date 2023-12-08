@@ -21,4 +21,4 @@ runs:
       run: |
         echo >&2 "GITHUB_ACTION_PATH: ${GITHUB_ACTION_PATH:-}"
         set -x
-        ${GITHUB_ACTION_PATH}/tools/run_nix_shell
+        ${GITHUB_ACTION_PATH}/tools/run_nix_shell.sh
