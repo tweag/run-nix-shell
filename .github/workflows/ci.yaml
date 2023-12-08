@@ -42,7 +42,7 @@ jobs:
       - name: Execute simple
         uses: ./
         with:
-          # verbose: true
+          verbose: true
           working-directory: ./tests/integration_tests
           options: |
             --arg customVarArg true
