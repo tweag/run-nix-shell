@@ -2,18 +2,14 @@
   customVarBool ? false,
   customVarStr ? "default",
   lock ? builtins.fromJSON (builtins.readFile ./../../flake.lock),
-  flakeCompat ?  (
-    fetchTarball {
-      url = lock.nodes.flake-compat.locked.url or "https://github.com/edolstra/flake-compat/archive/${lock.nodes.flake-compat.locked.rev}.tar.gz";
-      sha256 = lock.nodes.flake-compat.locked.narHash;
-    }
-  ),
-  nixpkgs ?  (
-    fetchTarball {
-      url = "https://github.com/NixOS/nixpkgs/archive/${lock.nodes.nixpkgs.locked.rev}.tar.gz";
-      sha256 = lock.nodes.nixpkgs.locked.narHash;
-    }
-  ),
+  flakeCompat ? fetchTarball {
+    url = lock.nodes.flake-compat.locked.url or "https://github.com/edolstra/flake-compat/archive/${lock.nodes.flake-compat.locked.rev}.tar.gz";
+    sha256 = lock.nodes.flake-compat.locked.narHash;
+  },
+  nixpkgs ? fetchTarball {
+    url = "https://github.com/NixOS/nixpkgs/archive/${lock.nodes.nixpkgs.locked.rev}.tar.gz";
+    sha256 = lock.nodes.nixpkgs.locked.narHash;
+  },
 }:
 (
   # Call flakeCompat with src pointing to the location of the flake.nix.
