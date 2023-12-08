@@ -41,8 +41,8 @@ jobs:
       - uses: ./.github/actions/set_up_runner
       - name: Execute simple
         uses: ./
-        working-directory: ./tests/integration_tests
         with:
+          working-directory: ./tests/integration_tests
           options: |
             --arg customVarArg true
             --argstr customVarStr "Hello, World!"

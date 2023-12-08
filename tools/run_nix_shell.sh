@@ -12,6 +12,7 @@ fail() {
 
 # MARK - Arguments
 
+cwd="${RNS_CWD:-}"
 script="${RNS_RUN:-}"
 
 nix_shell_opts=()
@@ -23,6 +24,10 @@ while (("$#")); do
     --arg*)
       nix_shell_opts+=( "${1}" "${2}" "${3}" )
       shift 3
+      ;;
+    --working-directory)
+      cwd="${2}"
+      shift 2
       ;;
     *)
       if [[ -z "${script:-}" ]]; then
@@ -58,6 +63,11 @@ fi
 echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") =======" 
 ls -l >&2
 # DEBUG END
+
+# Change to the specified working directory
+if [[ -n "${cwd:-}" ]]; then
+  cd "${cwd}"
+fi
 
 cmd=( nix-shell --pure )
 if [[ ${#nix_shell_opts[@]} -gt 0 ]]; then
