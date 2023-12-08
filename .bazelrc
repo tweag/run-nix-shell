@@ -2,8 +2,8 @@ build --enable_bzlmod
 
 # CI Configuration
 # ----------------
-ci:common --announce_rc
-ci:test --test_output=errors --test_summary=terse
+common:ci --announce_rc
+test:ci --test_output=errors --test_summary=terse
 
 # Remote Cache Authentication
 # ---------------------------
