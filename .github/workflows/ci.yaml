@@ -43,7 +43,7 @@ jobs:
         run: |
           bazel test //...
       - name: Execute simple
-        uses: ./
+        uses: .
         with:
           run: |
             echo "FIRST" > integration_test.out
