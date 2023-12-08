@@ -7,7 +7,11 @@ test:ci --test_output=errors --test_summary=terse
 
 # MacOS CI Configuration
 # ----------------------
+# The unit tests have a tendency to timeout when executed on the GH macos 
+# runners. So, we reduce the number of parallel jobs and increase the timeout 
+# for the tests.
 common:macos_ci --jobs=2
+common:macos_ci --test_timeout=600
 
 # Remote Cache Authentication
 # ---------------------------
