@@ -16,4 +16,18 @@ load(":run_nix_shell_test.bzl", "run_nix_shell_test")
 #     ],
 # )
 
-run_nix_shell_test(name = "simple_script")
+run_nix_shell_test(name = "simple_script_test")
+
+run_nix_shell_test(name = "multi_line_script_test")
+
+run_nix_shell_test(name = "script_file_test")
+
+run_nix_shell_test(name = "custom_var_bool_test")
+
+run_nix_shell_test(name = "custom_var_str_test")
+
+run_nix_shell_test(name = "rns_opts_test")
+
+run_nix_shell_test(name = "working_dir_test")
+
+run_nix_shell_test(name = "verbose_test")

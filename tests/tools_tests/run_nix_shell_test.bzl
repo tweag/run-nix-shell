@@ -1,6 +1,6 @@
 def run_nix_shell_test(name, test_file = None, **kwargs):
     if test_file == None:
-        test_file = "{}_test.sh".format(name)
+        test_file = "{}.sh".format(name)
 
     lib_name = name + "_library"
     native.sh_library(
@@ -11,7 +11,7 @@ def run_nix_shell_test(name, test_file = None, **kwargs):
     # lib_name_target = ":" + lib_name
     native.sh_test(
         name = name,
-        srcs = ["@run_nix_shell//tests/tools_tests:run_nix_shell_test.sh"],
+        srcs = ["@run_nix_shell//tests/tools_tests:run_nix_shell_test_runner.sh"],
         args = [
             "$(location :{})".format(lib_name),
         ],
