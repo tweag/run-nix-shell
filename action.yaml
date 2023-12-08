@@ -13,6 +13,10 @@ inputs:
     type: string
     description: The path where the nix-shell execution should take place.
     default: .
+  verbose:
+    type: boolean
+    description: Enable debug output written to stderr.
+    default: false
 
 runs:
   using: composite
@@ -22,4 +26,5 @@ runs:
         RNS_CWD: ${{ inputs.working-directory }}
         RNS_OPTS: ${{ inputs.options }}
         RNS_RUN: ${{ inputs.run }}
+        RNS_VERBOSE: ${{ inputs.verbose }}
       run: ${GITHUB_ACTION_PATH}/tools/run_nix_shell.sh

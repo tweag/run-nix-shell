@@ -5,8 +5,12 @@ set -o errexit -o nounset -o pipefail
 # NOTE: This script has been implemented so that it can be executed without Bazel. Do not pull in
 # external dependencies.
 
-fail() {
+warn() {
   echo >&2 "$@"
+}
+
+fail() {
+  warn "$@"
   exit 1
 }
 
@@ -15,6 +19,7 @@ fail() {
 cwd="${RNS_CWD:-}"
 script="${RNS_RUN:-}"
 
+verbose="${RNS_VERBOSE:-false}"
 nix_shell_opts=()
 while (("$#")); do
   case "${1}" in
@@ -29,6 +34,10 @@ while (("$#")); do
       cwd="${2}"
       shift 2
       ;;
+    --verbose)
+      verbose=true
+      shift 1
+      ;;
     *)
       if [[ -z "${script:-}" ]]; then
         script="${1}"
@@ -39,6 +48,23 @@ while (("$#")); do
       ;;
   esac
 done
+
+# MARK - Verbose
+
+if [[ "${verbose}" == "true" ]]; then
+  verbose_output="$(cat <<-EOF
+RNS_CWD: ${RNS_CWD:-}
+RNS_OPTS: ${RNS_OPTS:-}
+RNS_RUN: ${RNS_RUN:-}
+cwd: ${cwd:-}
+nix_shell_opts: $( printf "%q " "${nix_shell_opts[@]}" )
+script: ${script:-}
+EOF
+)"
+  warn "${verbose_output}"
+fi
+
+# MARK - Process Options and Arguments
 
 # Look for any options passed via the RNS_OPTS environment variable.
 # Add them to the nix_shell_opts.
@@ -58,11 +84,6 @@ if [[ -z "${script:-}" ]]; then
 fi
 
 # MARK - Execute script
-
-# DEBUG BEGIN
-echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") =======" 
-ls -l >&2
-# DEBUG END
 
 # Change to the specified working directory
 if [[ -n "${cwd:-}" ]]; then
