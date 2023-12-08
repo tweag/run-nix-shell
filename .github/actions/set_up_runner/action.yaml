@@ -16,7 +16,7 @@ runs:
     #       extra-substituters = https://cache.iog.io
     - uses: DeterminateSystems/nix-installer-action@v9
       with:
-        github_access_token: ${{ inputs.github_token }}
+        github-token: ${{ inputs.github_token }}
     - name: Configure
       shell: bash
       run: |
