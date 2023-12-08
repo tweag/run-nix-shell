@@ -2,3 +2,11 @@ build --enable_bzlmod
 
 # Tell Bazel that we are running on a Nix machine
 build --host_platform=@rules_nixpkgs_core//platforms:host
+
+# Remote Cache Authentication
+# ---------------------------
+try-import %workspace%/.bazelrc.auth
+
+# User Configuration
+# ------------------
+try-import %workspace%/.bazelrc.local
