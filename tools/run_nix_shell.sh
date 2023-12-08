@@ -51,14 +51,20 @@ done
 
 # MARK - Verbose
 
-if [[ "${verbose}" == "true" ]]; then
+is_verbose() {
+  [[ "${verbose}" == "true" ]]
+}
+
+if is_verbose; then
   verbose_output="$(cat <<-EOF
+=== run_nix_shell Inputs ===
 RNS_CWD: ${RNS_CWD:-}
 RNS_OPTS: ${RNS_OPTS:-}
 RNS_RUN: ${RNS_RUN:-}
 cwd: ${cwd:-}
 nix_shell_opts: $( printf "%q " "${nix_shell_opts[@]}" )
 script: ${script:-}
+===
 EOF
 )"
   warn "${verbose_output}"
@@ -95,4 +101,15 @@ if [[ ${#nix_shell_opts[@]} -gt 0 ]]; then
   cmd+=( "${nix_shell_opts[@]}" )
 fi
 cmd+=( --run "${script}" )
+
+if is_verbose; then
+  verbose_output="$(cat <<-EOF
+=== run_nix_shell command-line invocation ===
+$( printf "%q " "${cmd[@]}" )
+===
+EOF
+)"
+  warn "${verbose_output}"
+fi
+
 "${cmd[@]}"
