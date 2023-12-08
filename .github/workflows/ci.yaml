@@ -49,7 +49,7 @@ jobs:
           verbose: true
           working-directory: ./tests/integration_tests
           options: |
-            --arg customVarArg true
+            --arg customVarBool true
             --argstr customVarStr "Hello, World!"
           run: |
             echo "FIRST" > integration_test.out
