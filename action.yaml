@@ -16,4 +16,9 @@ runs:
       env:
         RNS_OPTS: ${{ inputs.options }}
         RNS_RUN: ${{ inputs.run }}
-      run: ${GITHUB_ACTION_PATH}/tools/run_nix_shell
+      # TODO: FIX ME!
+      # run: ${GITHUB_ACTION_PATH}/tools/run_nix_shell
+      run: |
+        echo >&2 "GITHUB_ACTION_PATH: ${GITHUB_ACTION_PATH:-}"
+        set -x
+        ${GITHUB_ACTION_PATH}/tools/run_nix_shell
