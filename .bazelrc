@@ -1,5 +1,10 @@
 build --enable_bzlmod
 
+# CI Configuration
+# ----------------
+ci:common --announce_rc
+ci:test --test_output=errors --test_summary=terse
+
 # Remote Cache Authentication
 # ---------------------------
 try-import %workspace%/.bazelrc.auth

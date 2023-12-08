@@ -33,6 +33,11 @@ jobs:
         with:
           buildbuddy_api_key: ${{ secrets.BUILDBUDDY_API_KEY }}
           bazelrc_path: .bazelrc.auth
+      - name: Configure
+        run: |
+          cat >>.bazelrc.local <<EOF
+          common --config=ci
+          EOF
       - name: Execute Bazel tests
         shell: bash
         run: |
