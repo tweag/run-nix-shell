@@ -19,6 +19,7 @@ fail() {
 cwd="${RNS_CWD:-}"
 script="${RNS_RUN:-}"
 
+pure="${RNS_PURE:-true}"
 verbose="${RNS_VERBOSE:-false}"
 nix_shell_opts=()
 while (("$#")); do
@@ -29,6 +30,14 @@ while (("$#")); do
     --arg*)
       nix_shell_opts+=( "${1}" "${2}" "${3}" )
       shift 3
+      ;;
+    --pure)
+      pure="true"
+      shift 1
+      ;;
+    --nopure)
+      pure="false"
+      shift 1
       ;;
     --working-directory)
       cwd="${2}"
@@ -61,8 +70,10 @@ if is_verbose; then
 RNS_CWD: ${RNS_CWD:-}
 RNS_OPTS: ${RNS_OPTS:-}
 RNS_RUN: ${RNS_RUN:-}
+RNS_PURE: ${RNS_PURE:-}
 cwd: ${cwd:-}
 nix_shell_opts: $( printf "%q " "${nix_shell_opts[@]}" )
+pure: ${pure:-}
 script: ${script:-}
 ===
 EOF
@@ -71,6 +82,10 @@ EOF
 fi
 
 # MARK - Process Options and Arguments
+
+if [[ "${pure}" == "true" ]]; then
+  nix_shell_opts+=( --pure )
+fi
 
 # Look for any options passed via the RNS_OPTS environment variable.
 # Add them to the nix_shell_opts.
@@ -96,7 +111,7 @@ if [[ -n "${cwd:-}" ]]; then
   cd "${cwd}"
 fi
 
-cmd=( nix-shell --pure )
+cmd=( nix-shell )
 if [[ ${#nix_shell_opts[@]} -gt 0 ]]; then
   cmd+=( "${nix_shell_opts[@]}" )
 fi
