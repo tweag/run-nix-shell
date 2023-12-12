@@ -1,0 +1,34 @@
+name: Run nix-shell scripts
+description: Executes shell scripts using nix-shell.
+
+inputs:
+  run:
+    type: string
+    required: true
+    description: The path to a file that contains shell code or the actual shell code.
+  pure:
+    type: boolean
+    default: true
+  options:
+    type: string
+    description: Any parameters that are to be passed to nix-shell are specified here.
+  working-directory:
+    type: string
+    description: The path where the nix-shell execution should take place.
+    default: .
+  verbose:
+    type: boolean
+    description: Enable debug output written to stderr.
+    default: false
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        RNS_CWD: ${{ inputs.working-directory }}
+        RNS_OPTS: ${{ inputs.options }}
+        RNS_RUN: ${{ inputs.run }}
+        RNS_PURE: ${{ inputs.pure }}
+        RNS_VERBOSE: ${{ inputs.verbose }}
+      run: ${GITHUB_ACTION_PATH}/tools/run_nix_shell.sh

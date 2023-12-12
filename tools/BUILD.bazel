@@ -1,0 +1,5 @@
+sh_binary(
+    name = "run_nix_shell",
+    srcs = ["run_nix_shell.sh"],
+    visibility = ["//:__subpackages__"],
+)

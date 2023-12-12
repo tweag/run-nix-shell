@@ -1,0 +1,26 @@
+name: Set up GitHub runner
+
+inputs:
+  github_token:
+    type: string
+
+runs:
+  using: composite
+  steps:
+    - uses: DeterminateSystems/nix-installer-action@v9
+      with:
+        github-token: ${{ inputs.github_token }}
+    - uses: DeterminateSystems/magic-nix-cache-action@v2
+    - name: Configure
+      shell: bash
+      run: |
+        cat >>.bazelrc.local <<EOF
+        common --config=ci
+        EOF
+    - name: Configure MacOS
+      if: ${{ runner.os == 'macOS' }}
+      shell: bash
+      run: |
+        cat >>.bazelrc.local <<EOF
+        common --config=macos_ci
+        EOF

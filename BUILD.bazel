@@ -1,0 +1,10 @@
+# exports_files(["flake.lock"])
+
+filegroup(
+    name = "flake_files",
+    srcs = [
+        "flake.lock",
+        "flake.nix",
+    ],
+    visibility = ["//:__subpackages__"],
+)
