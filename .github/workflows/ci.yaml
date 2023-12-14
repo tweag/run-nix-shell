@@ -71,7 +71,7 @@ jobs:
         uses: ./
         with:
           verbose: true
-          derivation_path: ./tests/integration_tests/shell.nix
+          derivation-path: ./tests/integration_tests/shell.nix
           options: |
             --argstr customVarStr "Hello, World!"
           run: |
