@@ -43,7 +43,7 @@ jobs:
       - uses: ./.github/actions/set_up_runner
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Execute simple
+      - name: Execute in directory with shell.nix
         uses: ./
         with:
           verbose: true
@@ -55,13 +55,32 @@ jobs:
             echo "FIRST" > integration_test.out
             echo "${CUSTOM_VAR_BOOL}" >> integration_test.out
             echo "${CUSTOM_VAR_STR}" >> integration_test.out
-      - name: Confirm output
+      - name: Confirm output for Execute in directory with shell.nix
         shell: bash
         run: |
           output="$(<./tests/integration_tests/integration_test.out)"
           expected="$(cat <<-EOF
           FIRST
           true
+          Hello, World!
+          EOF
+          )"
+          [[ "${output}" == "${expected}" ]] || \
+            (echo >&2 "Ouptput from integration test does not match:" "${output}"; exit 1)
+      - name: Execute in directory without shell.nix
+        uses: ./
+        with:
+          verbose: true
+          derivation_path: ./tests/integration_tests/shell.nix
+          options: |
+            --argstr customVarStr "Hello, World!"
+          run: |
+            echo "${CUSTOM_VAR_STR}" >> integration_test2.out
+      - name: Confirm output for Execute in directory without shell.nix
+        shell: bash
+        run: |
+          output="$(<./integration_test2.out)"
+          expected="$(cat <<-EOF
           Hello, World!
           EOF
           )"
