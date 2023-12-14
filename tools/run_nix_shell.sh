@@ -18,6 +18,7 @@ fail() {
 
 cwd="${RNS_CWD:-}"
 script="${RNS_RUN:-}"
+derivation_path="${RNS_DERIVATION_PATH:-}"
 
 pure="${RNS_PURE:-true}"
 verbose="${RNS_VERBOSE:-false}"
@@ -70,11 +71,13 @@ if is_verbose; then
 RNS_CWD: ${RNS_CWD:-}
 RNS_OPTS: ${RNS_OPTS:-}
 RNS_RUN: ${RNS_RUN:-}
+RNS_DERIVATION_PATH: ${RNS_DERIVATION_PATH:-}
 RNS_PURE: ${RNS_PURE:-}
 cwd: ${cwd:-}
 nix_shell_opts: $( printf "%q " "${nix_shell_opts[@]}" )
 pure: ${pure:-}
 script: ${script:-}
+derivation_path: ${derivation_path:-}
 ===
 EOF
 )"
@@ -82,6 +85,10 @@ EOF
 fi
 
 # MARK - Process Options and Arguments
+
+if [[ -n "${derivation_path:-}" ]]; then
+  nix_shell_opts+=( "${derivation_path}" )
+fi
 
 if [[ "${pure}" == "true" ]]; then
   nix_shell_opts+=( --pure )
