@@ -14,6 +14,15 @@ fail() {
   exit 1
 }
 
+absolute_path() {
+  local path="${1}"
+  local bname
+  local dname
+  bname="$( basename "${path}" )"
+  dname="$( dirname "${path}" )"
+  echo "$( cd "${dname}"; pwd )/${bname}"
+}
+
 # MARK - Arguments
 
 cwd="${RNS_CWD:-}"
@@ -87,6 +96,7 @@ fi
 # MARK - Process Options and Arguments
 
 if [[ -n "${derivation_path:-}" ]]; then
+  derivation_path="$( absolute_path "${derivation_path}" )"
   nix_shell_opts+=( "${derivation_path}" )
 fi
 
