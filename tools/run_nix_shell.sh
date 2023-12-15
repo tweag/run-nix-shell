@@ -95,9 +95,28 @@ fi
 
 # MARK - Process Options and Arguments
 
+# Resolve the target directory to an absolute path before processing the
+# derivation path. That logic may change directories.
+if [[ -n "${cwd:-}" ]]; then
+  cwd="$( absolute_path "${cwd}" )"
+fi
+
+# The shell.nix or default.nix may contain relative paths to other files. The
+# Nix logic does not appear to resolve these relative to the file, but to the
+# current directory. So, we will ensure that we are in the derivation's
+# directory before executing the command.
 if [[ -n "${derivation_path:-}" ]]; then
   derivation_path="$( absolute_path "${derivation_path}" )"
-  nix_shell_opts+=( "${derivation_path}" )
+  if [[ -d "${derivation_path}" ]]; then
+    derivation_dirname="${derivation_path}"
+  else
+    derivation_dirname="$( dirname "${derivation_path}" )"
+    derivation_basename="$( basename "${derivation_path}" )"
+  fi
+  cd "${derivation_dirname}"
+  if [[ -n "${derivation_basename:-}" ]]; then
+    nix_shell_opts+=( "${derivation_basename}" )
+  fi
 fi
 
 if [[ "${pure}" == "true" ]]; then
@@ -118,15 +137,21 @@ if [[ -n "${RNS_OPTS:-}" ]]; then
 fi
 
 if [[ -z "${script:-}" ]]; then
-  fail "A script for a path to a file must be provided."
+  fail "A script or a path to a file must be provided."
 fi
 
 # MARK - Execute script
 
 # Change to the specified working directory
 if [[ -n "${cwd:-}" ]]; then
-  cd "${cwd}"
+  cd_cmd="cd ${cwd}"
 fi
+
+script="$(cat <<-EOF
+${cd_cmd:-}
+${script}
+EOF
+)"
 
 cmd=( nix-shell )
 if [[ ${#nix_shell_opts[@]} -gt 0 ]]; then
