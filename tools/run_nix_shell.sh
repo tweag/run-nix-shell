@@ -162,6 +162,7 @@ cmd+=( --run "${script}" )
 if is_verbose; then
   verbose_output="$(cat <<-EOF
 === run_nix_shell command-line invocation ===
+pwd: ${PWD}
 $( printf "%q " "${cmd[@]}" )
 ===
 EOF
