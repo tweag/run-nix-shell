@@ -47,6 +47,7 @@ jobs:
         uses: ./
         with:
           verbose: true
+          derivation-path: ./tests/integration_tests
           working-directory: ./tests/integration_tests
           options: |
             --arg customVarBool true

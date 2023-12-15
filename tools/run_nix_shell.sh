@@ -163,8 +163,6 @@ if is_verbose; then
   verbose_output="$(cat <<-EOF
 === run_nix_shell command-line invocation ===
 pwd: ${PWD}
-ls:
-$( ls -l )
 $( printf "%q " "${cmd[@]}" )
 ===
 EOF
