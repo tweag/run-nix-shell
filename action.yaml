@@ -14,11 +14,14 @@ inputs:
     description: Any parameters that are to be passed to nix-shell are specified here.
   working-directory:
     type: string
-    description: The path where the nix-shell execution should take place.
+    description: |
+      The path where the script will be executed. This is not the path where nix-shell is executed.
     default: .
   derivation-path:
     type: string
-    description: The path to the shell.nix or default.nix to use to set up the environment.
+    description: |
+      The path to directory or the shell.nix or default.nix to use to set up the environment. This
+      is the directory where nix-shell is executed.
   verbose:
     type: boolean
     description: Enable debug output written to stderr.
