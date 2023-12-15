@@ -47,6 +47,7 @@ jobs:
         uses: ./
         with:
           verbose: true
+          # Demonstrate passing a directory that contains a shell.nix.
           derivation-path: ./tests/integration_tests
           working-directory: ./tests/integration_tests
           options: |
@@ -72,6 +73,7 @@ jobs:
         uses: ./
         with:
           verbose: true
+          # Demonstrate passing a path to a shell.nix.
           derivation-path: ./tests/integration_tests/shell.nix
           options: |
             --argstr customVarStr "Hello, World!"
