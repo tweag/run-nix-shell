@@ -22,6 +22,10 @@ inputs:
     description: |
       The path to directory or the shell.nix or default.nix to use to set up the environment. This
       is the directory where nix-shell is executed.
+  shell-flags:
+    type: string
+    default: set -o errexit -o nounset -o pipefail
+    description: These flags will be set before executing the script.
   verbose:
     type: boolean
     description: Enable debug output written to stderr.
@@ -38,4 +42,5 @@ runs:
         RNS_PURE: ${{ inputs.pure }}
         RNS_DERIVATION_PATH: ${{ inputs.derivation-path }}
         RNS_VERBOSE: ${{ inputs.verbose }}
+        RNS_SHELL_FLAGS: ${{ inputs.shelll-flags }}
       run: ${GITHUB_ACTION_PATH}/tools/run_nix_shell.sh
