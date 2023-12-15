@@ -14,6 +14,8 @@ run_nix_shell_test(name = "rns_opts_test")
 
 run_nix_shell_test(name = "script_file_test")
 
+run_nix_shell_test(name = "shell_flags_test")
+
 run_nix_shell_test(name = "simple_script_test")
 
 run_nix_shell_test(name = "verbose_test")
