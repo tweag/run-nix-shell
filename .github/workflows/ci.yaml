@@ -94,8 +94,9 @@ jobs:
         with:
           verbose: true
           derivation-path: ./tests/integration_tests
+          shell-flags: ''
           run: |
-            rm integration_test3.out
+            rm -f integration_test3.out
             # This is not true. If the recommended flags are set, we should not reach the next 
             # statement.
             [[ "true" == "false" ]]
@@ -112,6 +113,22 @@ jobs:
           )"
           [[ "${output}" == "${expected}" ]] || \
             (echo >&2 "Ouptput from integration test does not match:" "${output}"; exit 1)
+      - name: Execute with recommended shell flags
+        uses: ./
+        with:
+          verbose: true
+          derivation-path: ./tests/integration_tests
+          run: |
+            rm -f integration_test4.out
+            # This is not true. If the recommended flags are set, we should not reach the next 
+            # statement.
+            [[ "true" == "false" ]]
+            echo "HELLO" > integration_test4.out
+      - name: Confirm output for Execute with recommended shell flags
+        shell: bash
+        run: |
+          [[ -e integration_test4.out ]] && \
+            (echo >&2 "The integration_test4.out exists."; exit 1)
 
   all_ci_tests:
     runs-on: ubuntu-latest
