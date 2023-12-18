@@ -14,8 +14,14 @@ inputs:
     description: Any parameters that are to be passed to nix-shell are specified here.
   working-directory:
     type: string
-    description: The path where the nix-shell execution should take place.
+    description: |
+      The path where the script will be executed. This is not the path where nix-shell is executed.
     default: .
+  derivation-path:
+    type: string
+    description: |
+      The path to directory or the shell.nix or default.nix to use to set up the environment. This
+      is the directory where nix-shell is executed.
   verbose:
     type: boolean
     description: Enable debug output written to stderr.
@@ -30,5 +36,6 @@ runs:
         RNS_OPTS: ${{ inputs.options }}
         RNS_RUN: ${{ inputs.run }}
         RNS_PURE: ${{ inputs.pure }}
+        RNS_DERIVATION_PATH: ${{ inputs.derivation-path }}
         RNS_VERBOSE: ${{ inputs.verbose }}
       run: ${GITHUB_ACTION_PATH}/tools/run_nix_shell.sh

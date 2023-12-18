@@ -4,6 +4,8 @@ run_nix_shell_test(name = "custom_var_bool_test")
 
 run_nix_shell_test(name = "custom_var_str_test")
 
+run_nix_shell_test(name = "derivation_path_test")
+
 run_nix_shell_test(name = "multi_line_script_test")
 
 run_nix_shell_test(name = "pure_test")
