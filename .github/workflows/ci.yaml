@@ -128,8 +128,11 @@ jobs:
         if: always()
         shell: bash
         run: |
-          [[ -e integration_test4.out ]] && \
-            (echo >&2 "The integration_test4.out exists."; exit 1)
+          if [[ -e integration_test4.out ]]; then
+            echo >&2 "The integration_test4.out exists." 
+            exit 1
+          fi
+          echo "SUCCESS"
 
   all_ci_tests:
     runs-on: ubuntu-latest
