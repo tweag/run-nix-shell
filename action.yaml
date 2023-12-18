@@ -44,5 +44,6 @@ runs:
         RNS_VERBOSE: ${{ inputs.verbose }}
         # If the client specifies an empty string for the flags, we need to set the RNS_SHELL_FLAGS 
         # env variable to the special value false.
-        RNS_SHELL_FLAGS: ${{ inputs.shelll-flags == '' && 'false' || inputs.shell-flags }}
+        # RNS_SHELL_FLAGS: ${{ inputs.shelll-flags == '' && 'false' || inputs.shell-flags }}
+        RNS_SHELL_FLAGS: ${{ inputs.shelll-flags }}
       run: ${GITHUB_ACTION_PATH}/tools/run_nix_shell.sh
