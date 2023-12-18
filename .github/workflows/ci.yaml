@@ -125,6 +125,7 @@ jobs:
             [[ "true" == "false" ]]
             echo "HELLO" > integration_test4.out
       - name: Confirm output for Execute with recommended shell flags
+        if: always()
         shell: bash
         run: |
           [[ -e integration_test4.out ]] && \
