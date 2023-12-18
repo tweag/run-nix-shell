@@ -28,6 +28,7 @@ absolute_path() {
 cwd="${RNS_CWD:-}"
 script="${RNS_RUN:-}"
 derivation_path="${RNS_DERIVATION_PATH:-}"
+# The default flags listed below are equivalent to `set -euo pipefail`.
 shell_flags="${RNS_SHELL_FLAGS:-set -o errexit -o nounset -o pipefail}"
 
 pure="${RNS_PURE:-true}"
