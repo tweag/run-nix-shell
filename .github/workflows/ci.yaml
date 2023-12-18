@@ -89,6 +89,26 @@ jobs:
           )"
           [[ "${output}" == "${expected}" ]] || \
             (echo >&2 "Ouptput from integration test does not match:" "${output}"; exit 1)
+      - name: Execute without recommended shell flags
+        uses: ./
+        with:
+          verbose: true
+          derivation-path: ./tests/integration_tests
+          run: |
+            # This is not true. If the recommended flags are set, we should not reach the next 
+            # statement.
+            [[ "true" == "false" ]]
+            echo "HELLO" > integration_test3.out
+      - name: Confirm output for Execute without recommended shell flags
+        shell: bash
+        run: |
+          output="$(<./integration_test3.out)"
+          expected="$(cat <<-EOF
+          HELLO
+          EOF
+          )"
+          [[ "${output}" == "${expected}" ]] || \
+            (echo >&2 "Ouptput from integration test does not match:" "${output}"; exit 1)
 
   all_ci_tests:
     runs-on: ubuntu-latest

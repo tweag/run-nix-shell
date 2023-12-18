@@ -42,5 +42,7 @@ runs:
         RNS_PURE: ${{ inputs.pure }}
         RNS_DERIVATION_PATH: ${{ inputs.derivation-path }}
         RNS_VERBOSE: ${{ inputs.verbose }}
-        RNS_SHELL_FLAGS: ${{ inputs.shelll-flags }}
+        # If the client specifies an empty string for the flags, we need to set the RNS_SHELL_FLAGS 
+        # env variable to the special value false.
+        RNS_SHELL_FLAGS: ${{ inputs.shelll-flags == '' && 'false' || inputs.shell-flags }}
       run: ${GITHUB_ACTION_PATH}/tools/run_nix_shell.sh
