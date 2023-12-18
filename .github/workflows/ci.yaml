@@ -127,7 +127,6 @@ jobs:
             ls does_not_exist
             echo "HELLO" > integration_test4.out
       - name: Confirm output for Execute with recommended shell flags
-        # if: always()
         shell: bash
         run: |
           if [[ -e integration_test4.out ]]; then
