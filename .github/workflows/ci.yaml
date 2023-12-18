@@ -114,6 +114,8 @@ jobs:
           [[ "${output}" == "${expected}" ]] || \
             (echo >&2 "Ouptput from integration test does not match:" "${output}"; exit 1)
       - name: Execute with recommended shell flags
+        # This step should fail. We will confirm that it failed as expected in the next step.
+        continue-on-error: true 
         uses: ./
         with:
           verbose: true
@@ -125,7 +127,7 @@ jobs:
             ls does_not_exist
             echo "HELLO" > integration_test4.out
       - name: Confirm output for Execute with recommended shell flags
-        if: always()
+        # if: always()
         shell: bash
         run: |
           if [[ -e integration_test4.out ]]; then
