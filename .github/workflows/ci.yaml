@@ -95,6 +95,7 @@ jobs:
           verbose: true
           derivation-path: ./tests/integration_tests
           run: |
+            rm integration_test3.out
             # This is not true. If the recommended flags are set, we should not reach the next 
             # statement.
             [[ "true" == "false" ]]
@@ -102,6 +103,8 @@ jobs:
       - name: Confirm output for Execute without recommended shell flags
         shell: bash
         run: |
+          [[ -e integration_test3.out ]] || \
+            (echo >&2 "The integration_test3.out does not exist."; exit 1)
           output="$(<./integration_test3.out)"
           expected="$(cat <<-EOF
           HELLO
