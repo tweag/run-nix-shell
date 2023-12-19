@@ -28,6 +28,8 @@ absolute_path() {
 cwd="${RNS_CWD:-}"
 script="${RNS_RUN:-}"
 derivation_path="${RNS_DERIVATION_PATH:-}"
+# The default flags listed below are equivalent to `set -euo pipefail`.
+shell_flags="${RNS_SHELL_FLAGS:-set -o errexit -o nounset -o pipefail}"
 
 pure="${RNS_PURE:-true}"
 verbose="${RNS_VERBOSE:-false}"
@@ -82,9 +84,11 @@ RNS_OPTS: ${RNS_OPTS:-}
 RNS_RUN: ${RNS_RUN:-}
 RNS_DERIVATION_PATH: ${RNS_DERIVATION_PATH:-}
 RNS_PURE: ${RNS_PURE:-}
+RNS_SHELL_FLAGS: ${RNS_SHELL_FLAGS:-}
 cwd: ${cwd:-}
 nix_shell_opts: $( printf "%q " "${nix_shell_opts[@]}" )
 pure: ${pure:-}
+shell_flags: ${shell_flags:-}
 script: ${script:-}
 derivation_path: ${derivation_path:-}
 ===
@@ -136,6 +140,12 @@ if [[ -n "${RNS_OPTS:-}" ]]; then
   fi
 fi
 
+# If the client does not want any shell flags, we use the special value "false"
+# to indicate that no flags should be applied.
+if [[ "${shell_flags:-}" == "false" ]]; then
+  shell_flags=""
+fi
+
 if [[ -z "${script:-}" ]]; then
   fail "A script or a path to a file must be provided."
 fi
@@ -148,6 +158,7 @@ if [[ -n "${cwd:-}" ]]; then
 fi
 
 script="$(cat <<-EOF
+${shell_flags:-}
 ${cd_cmd:-}
 ${script}
 EOF

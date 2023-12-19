@@ -89,6 +89,51 @@ jobs:
           )"
           [[ "${output}" == "${expected}" ]] || \
             (echo >&2 "Ouptput from integration test does not match:" "${output}"; exit 1)
+      - name: Execute without recommended shell flags
+        uses: ./
+        with:
+          verbose: true
+          derivation-path: ./tests/integration_tests
+          shell-flags: ''
+          run: |
+            rm -f integration_test3.out
+            # This fails. If the recommended flags are set, we should not reach the following 
+            # statement.
+            ls does_not_exist
+            echo "HELLO" > integration_test3.out
+      - name: Confirm output for Execute without recommended shell flags
+        shell: bash
+        run: |
+          [[ -e integration_test3.out ]] || \
+            (echo >&2 "The integration_test3.out does not exist."; exit 1)
+          output="$(<./integration_test3.out)"
+          expected="$(cat <<-EOF
+          HELLO
+          EOF
+          )"
+          [[ "${output}" == "${expected}" ]] || \
+            (echo >&2 "Ouptput from integration test does not match:" "${output}"; exit 1)
+      - name: Execute with recommended shell flags
+        # This step should fail. We will confirm that it failed as expected in the next step.
+        continue-on-error: true 
+        uses: ./
+        with:
+          verbose: true
+          derivation-path: ./tests/integration_tests
+          run: |
+            rm -f integration_test4.out
+            # This fails. If the recommended flags are set, we should not reach the following 
+            # statement.
+            ls does_not_exist
+            echo "HELLO" > integration_test4.out
+      - name: Confirm output for Execute with recommended shell flags
+        shell: bash
+        run: |
+          if [[ -e integration_test4.out ]]; then
+            echo >&2 "The integration_test4.out exists." 
+            exit 1
+          fi
+          echo "SUCCESS"
 
   all_ci_tests:
     runs-on: ubuntu-latest
