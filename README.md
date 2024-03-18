@@ -59,6 +59,9 @@ jobs:
 | Input | Description |
 | ----- | ----------- |
 | `run` | The script to be executed using `nix-shell`. This can be the actual script or a path to as cript file. |
+| `pure` | Whether to run the script with the `--pure` option. Defaults to `true`. |
 | `options` | Any options that you want to pass to `nix-shell`. |
 | `working-directory` | This will be the current working direcotry when the script is executed. |
+| `derivation-path` | The path to directory or the `shell.nix` or `default.nix` to use to set up the environment. This is the directory where `nix-shell` is executed. |
+| `shell-flags` | These flags will be set before executing the script. |
 | `verbose` | Enables additional output for debugging this action. |
