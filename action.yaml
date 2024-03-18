@@ -9,6 +9,7 @@ inputs:
   pure:
     type: boolean
     default: true
+    description: Whether to run the script with the `--pure` option. Defaults to `true`.
   options:
     type: string
     description: Any parameters that are to be passed to nix-shell are specified here.
