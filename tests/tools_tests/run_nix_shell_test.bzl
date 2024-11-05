@@ -19,9 +19,14 @@ def run_nix_shell_test(name, test_file = None, **kwargs):
             "//:flake_files",
             "//tools:run_nix_shell",
         ],
-        # MacOS sandbox fails this test with the following error:
-        #   sandbox-exec: sandbox_apply: Operation not permitted
-        tags = ["no-sandbox"],
+        tags = [
+            # MacOS sandbox fails this test with the following error:
+            #   sandbox-exec: sandbox_apply: Operation not permitted
+            "no-sandbox",
+            # Avoid race condition with fetchTarball failing to access
+            #   $HOME/.cache/nix/tarball-cache
+            "exclusive-if-local",
+        ],
         deps = [
             "@bazel_tools//tools/bash/runfiles",
             "@cgrindel_bazel_starlib//shlib/lib:assertions",
