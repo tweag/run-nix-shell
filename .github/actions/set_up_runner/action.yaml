@@ -10,7 +10,7 @@ runs:
     - uses: DeterminateSystems/nix-installer-action@main
       with:
         github-token: ${{ inputs.github_token }}
-    - uses: DeterminateSystems/magic-nix-cache-action@main
+    #- uses: DeterminateSystems/magic-nix-cache-action@main
     - name: Configure
       shell: bash
       run: |
