@@ -11,6 +11,8 @@ runs:
       with:
         github-token: ${{ inputs.github_token }}
     - uses: DeterminateSystems/magic-nix-cache-action@main
+    - run: 'nix --version'
+      shell: bash
     - name: Configure
       shell: bash
       run: |
