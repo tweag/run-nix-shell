@@ -1,0 +1,7 @@
+{
+  "extends": [
+    "github>tweag/renovate-presets:ruleset_base",
+    "helpers:pinGitHubActionDigests"
+  ],
+  "gitAuthor": "Renovate Bot <bot@renovateapp.com>"
+}
