@@ -13,10 +13,14 @@ filegroup(
 
 genrule(
     name = "dist",
-    cmd = "HOME=`pwd` $(location @nodejs//:bin/npx) @vercel/ncc build index.js -o $(RULEDIR)/generated",
+    cmd = """
+    export HOME=`pwd`
+    NPM=$(location @nodejs//:bin/npm)
+    "$$NPM" ci && "$$NPM" exec -- @vercel/ncc build index.js -o $(RULEDIR)/generated
+    """,
     srcs = ["package.json", "package-lock.json", "index.js"],
     tags = ["requires-network"],
-    tools = ["@nodejs//:bin/npx"],
+    tools = ["@nodejs//:bin/npm"],
     outs = ["generated/index.js"],
     visibility = ["//:__subpackages__"],
 )
