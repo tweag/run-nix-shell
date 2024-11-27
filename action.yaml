@@ -32,18 +32,10 @@ inputs:
     description: Enable debug output written to stderr.
     default: false
 
+outputs:
+  outputs:
+    description: The outputs of the nix-shell-run
+
 runs:
-  using: composite
-  steps:
-    - shell: bash
-      env:
-        RNS_CWD: ${{ inputs.working-directory }}
-        RNS_OPTS: ${{ inputs.options }}
-        RNS_RUN: ${{ inputs.run }}
-        RNS_PURE: ${{ inputs.pure }}
-        RNS_DERIVATION_PATH: ${{ inputs.derivation-path }}
-        RNS_VERBOSE: ${{ inputs.verbose }}
-        # If the client specifies an empty string for the flags, we need to set the RNS_SHELL_FLAGS 
-        # env variable to the special value false.
-        RNS_SHELL_FLAGS: ${{ inputs.shell-flags == '' && 'false' || inputs.shell-flags }}
-      run: ${GITHUB_ACTION_PATH}/tools/run_nix_shell.sh
+  using: node20                 # keep this in sync with @nodejs in MODULE.bazel
+  main: dist/index.js

@@ -1,3 +1,5 @@
+load("@cgrindel_bazel_starlib//updatesrc:defs.bzl", "updatesrc_diff_and_update")
+
 # exports_files(["flake.lock"])
 
 filegroup(
@@ -7,4 +9,20 @@ filegroup(
         "flake.nix",
     ],
     visibility = ["//:__subpackages__"],
+)
+
+genrule(
+    name = "dist",
+    cmd = "HOME=`pwd` $(location @nodejs//:bin/npx) @vercel/ncc build index.js -o $(RULEDIR)/generated",
+    srcs = ["package.json", "package-lock.json", "index.js"],
+    tags = ["requires-network"],
+    tools = ["@nodejs//:bin/npx"],
+    outs = ["generated/index.js"],
+    visibility = ["//:__subpackages__"],
+)
+
+updatesrc_diff_and_update(
+    name = "update",
+    srcs = ["dist/index.js"],
+    outs = [":dist"],
 )

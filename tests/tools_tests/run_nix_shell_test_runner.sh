@@ -27,7 +27,18 @@ flake_lock_location=run_nix_shell/flake.lock
 flake_lock="$(rlocation "${flake_lock_location}")" || \
   (echo >&2 "Failed to locate ${flake_lock_location}" && exit 1)
 
+node_binary_location=nodejs/bin/node
+node_binary="$(rlocation "${node_binary_location}")" || \
+  (echo >&2 "Failed to locate ${node_binary_location}" && exit 1)
+
+node_index_js_location=run_nix_shell/generated/index.js
+node_index_js="$(rlocation "${node_index_js_location}")" || \
+  (echo >&2 "Failed to locate ${node_index_js_location}" && exit 1)
+
 # MARK - Setup
+
+export RNS_NODE="$node_binary"
+export RNS_INDEX_JS="$node_index_js"
 
 cat >shell.nix <<-EOF
 { 
