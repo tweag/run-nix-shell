@@ -147,8 +147,9 @@ jobs:
         run: |-
           actual='${{ steps.sample.outputs.what }}'
           if [[ "$actual" != 'thing' ]]; then
-          echo >&2 "The output from \`sample\` was wrong. Wanted \`thing\` but got \`${actual}\`"
-          exit 1
+            echo >&2 "The output from \`sample\` was wrong. Wanted \`thing\` but got \`${actual}\`"
+            exit 1
+          fi
 
 
   all_ci_tests:
