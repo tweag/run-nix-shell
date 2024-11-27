@@ -97,88 +97,35 @@ EOF
   warn "${verbose_output}"
 fi
 
-# MARK - Process Options and Arguments
+# Mark - set inputs for action
 
-# Resolve the target directory to an absolute path before processing the
-# derivation path. That logic may change directories.
-if [[ -n "${cwd:-}" ]]; then
-  cwd="$( absolute_path "${cwd}" )"
+if [ "${#nix_shell_opts[@]}" -gt 0 ]; then
+    options=$( printf "%q " "${nix_shell_opts[@]}" )
+    options="${options% }" # strip right space
+else
+    options="${RNS_OPTS:-}"
 fi
 
-# The shell.nix or default.nix may contain relative paths to other files. The
-# Nix logic does not appear to resolve these relative to the file, but to the
-# current directory. So, we will ensure that we are in the derivation's
-# directory before executing the command.
-if [[ -n "${derivation_path:-}" ]]; then
-  derivation_path="$( absolute_path "${derivation_path}" )"
-  if [[ -d "${derivation_path}" ]]; then
-    derivation_dirname="${derivation_path}"
-  else
-    derivation_dirname="$( dirname "${derivation_path}" )"
-    derivation_basename="$( basename "${derivation_path}" )"
-  fi
-  cd "${derivation_dirname}"
-  if [[ -n "${derivation_basename:-}" ]]; then
-    nix_shell_opts+=( "${derivation_basename}" )
-  fi
-fi
+# map script variables to action inputs (see action.yaml)
+declare -a INPUTS=(
+    derivation-path "${derivation_path:-}"
+    options "$options"
+    pure "$pure"
+    run "$script"
+    shell-flags "${shell_flags:-}"
+    verbose "$verbose"
+    working-directory "${cwd:-}"
+)
 
-if [[ "${pure}" == "true" ]]; then
-  nix_shell_opts+=( --pure )
-fi
+for ((i=0; i < ${#INPUTS[@]}; i+=2)); do
+    name="${INPUTS[i]}"
+    value="${INPUTS[i+1]}"
 
-# Look for any options passed via the RNS_OPTS environment variable.
-# Add them to the nix_shell_opts.
-if [[ -n "${RNS_OPTS:-}" ]]; then
-  # Parse the RNS_OPTS string.
-  while IFS=$'\0' read -r -d '' arg; do 
-    more_nix_shell_opts+=( "${arg}" ) 
-  done < <(xargs printf '%s\0' <<<"${RNS_OPTS}")
-  # Add to the nix_shell_opts if we found any
-  if [[ ${#more_nix_shell_opts[@]} ]]; then
-    nix_shell_opts+=( "${more_nix_shell_opts[@]}" )
-  fi
-fi
+    if [[ -n "$value" ]]; then
+        input="INPUT_$(echo "${name}" | tr '[:lower:]' '[:upper:]')" # prefix with INPUT_ and uppercase
+        input="${input// /_}"   # replace spaces with underscores
+        variables+=( "${input}=${value}" )
+    fi
+done
 
-# If the client does not want any shell flags, we use the special value "false"
-# to indicate that no flags should be applied.
-if [[ "${shell_flags:-}" == "false" ]]; then
-  shell_flags=""
-fi
-
-if [[ -z "${script:-}" ]]; then
-  fail "A script or a path to a file must be provided."
-fi
-
-# MARK - Execute script
-
-# Change to the specified working directory
-if [[ -n "${cwd:-}" ]]; then
-  cd_cmd="cd ${cwd}"
-fi
-
-script="$(cat <<-EOF
-${shell_flags:-}
-${cd_cmd:-}
-${script}
-EOF
-)"
-
-cmd=( nix-shell )
-if [[ ${#nix_shell_opts[@]} -gt 0 ]]; then
-  cmd+=( "${nix_shell_opts[@]}" )
-fi
-cmd+=( --run "${script}" )
-
-if is_verbose; then
-  verbose_output="$(cat <<-EOF
-=== run_nix_shell command-line invocation ===
-pwd: ${PWD}
-$( printf "%q " "${cmd[@]}" )
-===
-EOF
-)"
-  warn "${verbose_output}"
-fi
-
-"${cmd[@]}"
+exec env "${variables[@]}" "${RNS_NODE:-node}" "${RNS_INDEX_JS:-dist/index.js}"
