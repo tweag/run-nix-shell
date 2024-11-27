@@ -14,15 +14,6 @@ fail() {
   exit 1
 }
 
-absolute_path() {
-  local path="${1}"
-  local bname
-  local dname
-  bname="$( basename "${path}" )"
-  dname="$( dirname "${path}" )"
-  echo "$( cd "${dname}"; pwd )/${bname}"
-}
-
 # MARK - Arguments
 
 cwd="${RNS_CWD:-}"
