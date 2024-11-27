@@ -38,4 +38,4 @@ outputs:
 
 runs:
   using: node20                 # keep this in sync with @nodejs in MODULE.bazel
-  main: dist/index.js
+  main: dist/bundle.mjs
