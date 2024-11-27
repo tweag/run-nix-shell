@@ -138,6 +138,7 @@ jobs:
         id: sample
         uses: ./
         with:
+          derivation-path: ./tests/integration_tests
           pure: false
           run: |-
             echo "what=thing" >> "$GITHUB_OUTPUT"
