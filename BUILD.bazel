@@ -14,9 +14,12 @@ filegroup(
 genrule(
     name = "dist",
     cmd = """
-    export HOME=`pwd`
+    set -euo pipefail
+    # index.js should not be a symlink
+    cat index.js > i.js && mv i.js index.js
     NPM=$(location @nodejs//:bin/npm)
-    "$$NPM" ci && "$$NPM" exec -- @vercel/ncc build index.js -o $(RULEDIR)/generated
+    "$$NPM" ci
+    "$$NPM" exec -- @vercel/ncc build index.js -o $(RULEDIR)/generated --no-cache
     """,
     srcs = ["package.json", "package-lock.json", "index.js"],
     tags = ["requires-network"],
