@@ -2,15 +2,10 @@
     "name": "run-nix-shell-scripts",
     "version": "1.0.0",
     "main": "index.js",
-    "scripts": {
-        "build": "ncc build index.js -o dist"
-    },
+    "type": "module",
     "dependencies": {
         "@actions/core": "^1.10.0",
         "@actions/exec": "^1.1.0",
         "shlex": "^2.1.2"
-    },
-    "devDependencies": {
-        "@vercel/ncc": "^0.36.1"
     }
 }

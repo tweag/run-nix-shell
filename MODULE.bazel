@@ -30,3 +30,9 @@ nix_pkg.attr(
     repo = "@nixpkgs",
 )
 use_repo(nix_pkg, "nodejs")
+
+nix_pkg.attr(
+    attr = "bun",
+    repo = "@nixpkgs",
+)
+use_repo(nix_pkg, "bun")
