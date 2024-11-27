@@ -1,3 +1,5 @@
+load("@cgrindel_bazel_starlib//updatesrc:defs.bzl", "updatesrc_diff_and_update")
+
 # exports_files(["flake.lock"])
 
 filegroup(
@@ -7,4 +9,29 @@ filegroup(
         "flake.nix",
     ],
     visibility = ["//:__subpackages__"],
+)
+
+genrule(
+    name = "dist",
+    cmd = """
+    set -euo pipefail
+    # provide a writable home dir
+    export HOME=`pwd`
+    # index.js should not be a symlink
+    cat index.js > i.js && mv i.js index.js
+    NPM=$(location @nodejs//:bin/npm)
+    "$$NPM" ci
+    "$$NPM" exec -- @vercel/ncc build index.js -o $(RULEDIR)/generated --no-cache
+    """,
+    srcs = ["package.json", "package-lock.json", "index.js"],
+    tags = ["requires-network"],
+    tools = ["@nodejs//:bin/npm"],
+    outs = ["generated/index.js"],
+    visibility = ["//:__subpackages__"],
+)
+
+updatesrc_diff_and_update(
+    name = "update",
+    srcs = ["dist/index.js"],
+    outs = [":dist"],
 )
