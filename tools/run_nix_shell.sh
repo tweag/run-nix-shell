@@ -98,20 +98,20 @@ else
 fi
 
 # map script variables to action inputs (see action.yaml)
-declare -A INPUTS=(
-    ["derivation-path"]="${derivation_path:-}"
-    ["options"]="$options"
-    ["pure"]="$pure"
-    ["run"]="$script"
-    ["shell-flags"]="${shell_flags:-}"
-    ["verbose"]="$verbose"
-    ["working-directory"]="${cwd:-}"
+declare -a INPUTS=(
+    derivation-path "${derivation_path:-}"
+    options "$options"
+    pure "$pure"
+    run "$script"
+    shell-flags "${shell_flags:-}"
+    verbose "$verbose"
+    working-directory "${cwd:-}"
 )
 
-declare -a variables=()
+for ((i=0; i < ${#INPUTS[@]}; i+=2)); do
+    name="${INPUTS[i]}"
+    value="${INPUTS[i+1]}"
 
-for name in "${!INPUTS[@]}"; do
-    value="${INPUTS[$name]}"
     if [[ -n "$value" ]]; then
         input="INPUT_${name^^}" # prefix with INPUT_ and uppercase
         input="${input// /_}"   # replace spaces with underscores
