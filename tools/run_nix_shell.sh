@@ -119,4 +119,4 @@ for ((i=0; i < ${#INPUTS[@]}; i+=2)); do
     fi
 done
 
-exec env "${variables[@]}" "${RNS_NODE:-node}" "${RNS_INDEX_JS:-dist/index.js}"
+exec env "${variables[@]}" "${NODE:-node}" "${RNS_BUNDLE_MJS:-dist/bundle.mjs}"
