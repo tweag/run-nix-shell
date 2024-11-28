@@ -18942,7 +18942,7 @@ ${runScript}`;
       silent: true,
       listeners: {
         stdout: (data) => process.stdout.write(data),
-        stderr: (data1) => process.stderr.write(data1)
+        stderr: (data) => process.stderr.write(data)
       }
     };
     if (workingDir) {
