@@ -113,7 +113,7 @@ for ((i=0; i < ${#INPUTS[@]}; i+=2)); do
     value="${INPUTS[i+1]}"
 
     if [[ -n "$value" ]]; then
-        input="INPUT_${name^^}" # prefix with INPUT_ and uppercase
+        input="INPUT_$(echo "${name}" | tr '[:lower:]' '[:upper:]')" # prefix with INPUT_ and uppercase
         input="${input// /_}"   # replace spaces with underscores
         variables+=( "${input}=${value}" )
     fi
