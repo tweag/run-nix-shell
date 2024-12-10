@@ -38,6 +38,6 @@ jobs:
           value1: ${{ github.event.inputs.release_tag }}
 
       # Create or move the major version tag
-      - uses: cgrindel/gha_move_major_version_tag@bbb6822ec2370b159864afb122eaa0c6dbe4d285 # v1
+      - uses: cgrindel/gha_move_major_version_tag@d4e7b9cab92bb233953f77b80b390944b9d530d4 # v1
         with:
           release_tag: ${{ steps.resolve_release_tag.outputs.selected_value }}
