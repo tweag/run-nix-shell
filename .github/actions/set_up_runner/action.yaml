@@ -10,7 +10,7 @@ runs:
     - uses: DeterminateSystems/nix-installer-action@e50d5f73bfe71c2dd0aa4218de8f4afa59f8f81d # v16
       with:
         github-token: ${{ inputs.github_token }}
-    - uses: DeterminateSystems/magic-nix-cache-action@87b14cf437d03d37989d87f0fa5ce4f5dc1a330b # v8
+    - uses: DeterminateSystems/magic-nix-cache-action@cb3030da0487efd312ad3c07fc4ad1960d35ec60 # v10
     - run: 'nix --version'
       shell: bash
     - name: Configure
