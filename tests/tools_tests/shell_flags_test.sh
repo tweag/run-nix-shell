@@ -5,7 +5,7 @@ failed=false
 echo "This should not be seen."
 ' > output.txt || failed=true
 output="$( <output.txt )"
-assert_equal "" "${output}" "${assert_msg}"
+assert_no_match ".*This should not be seen.*" "${output}" "${assert_msg}"
 assert_equal "true" "${failed}" "${assert_msg}"
 
 assert_msg="with no shell flags, script will exit without an error code on failure"

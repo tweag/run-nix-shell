@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     flake-utils.url = "github:numtide/flake-utils";
     # Library for working with tools that need default.nix and shell.nix.
     # https://nixos.wiki/wiki/Flakes#Using_flakes_with_stable_Nix

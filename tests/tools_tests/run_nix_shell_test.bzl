@@ -16,8 +16,10 @@ def run_nix_shell_test(name, test_file = None, **kwargs):
         ],
         data = [
             lib_name,
+            "//:dist",
             "//:flake_files",
             "//tools:run_nix_shell",
+            "@nodejs//:bin/node",
         ],
         tags = [
             # MacOS sandbox fails this test with the following error:
