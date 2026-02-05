@@ -37,5 +37,5 @@ outputs:
     description: The outputs of the nix-shell-run
 
 runs:
-  using: node20                 # keep this in sync with @nodejs in MODULE.bazel
+  using: node24                 # keep this in sync with @nodejs in MODULE.bazel
   main: dist/bundle.mjs

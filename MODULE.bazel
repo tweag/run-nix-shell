@@ -26,7 +26,7 @@ nix_pkg = use_extension("@rules_nixpkgs_core//extensions:package.bzl", "nix_pkg"
 nix_pkg.attr(
     name = "nodejs",
     # keep this in sync with action.yaml
-    attr = "nodejs_20",
+    attr = "nodejs_24",
     repo = "@nixpkgs",
 )
 use_repo(nix_pkg, "nodejs")
