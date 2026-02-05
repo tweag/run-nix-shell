@@ -26,7 +26,7 @@ genrule(
     """,
     srcs = ["package.json", "bun.lockb", "index.js"],
     tags = ["requires-network"],
-    tools = ["@nodejs//:bin/npm", "@bun//:bin/bun"],
+    tools = ["@bun//:bin/bun"],
     outs = ["generated/bundle.mjs"],
     visibility = ["//:__subpackages__"],
 )
