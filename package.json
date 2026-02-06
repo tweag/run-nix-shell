@@ -4,7 +4,7 @@
     "main": "index.js",
     "type": "module",
     "dependencies": {
-        "@actions/core": "^1.10.0",
+        "@actions/core": "^3.0.0",
         "@actions/exec": "^1.1.0",
         "shlex": "^2.1.2"
     }

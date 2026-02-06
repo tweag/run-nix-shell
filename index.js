@@ -1,5 +1,5 @@
-const core = require("@actions/core");
-const exec = require("@actions/exec");
+import * as core from "@actions/core";
+import * as exec from "@actions/exec";
 const path = require("path");
 const sh_join = require("shlex").join;
 const sh_split = require("shlex").split;
