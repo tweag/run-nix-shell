@@ -3,5 +3,11 @@
     "github>tweag/renovate-presets:ruleset_base",
     "helpers:pinGitHubActionDigests"
   ],
-  "gitAuthor": "Renovate Bot <bot@renovateapp.com>"
+  "gitAuthor": "Renovate Bot <bot@renovateapp.com>",
+  "packageRules": [
+    {
+      "matchFileNames": ["MODULE.bazel"],
+      "enabled": true
+    }
+  ]
 }
