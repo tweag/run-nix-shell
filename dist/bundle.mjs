@@ -1,5 +1,33 @@
 import { createRequire } from "node:module";
+var __defProp = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __moduleCache = /* @__PURE__ */ new WeakMap;
+var __toCommonJS = (from) => {
+  var entry = __moduleCache.get(from), desc;
+  if (entry)
+    return entry;
+  entry = __defProp({}, "__esModule", { value: true });
+  if (from && typeof from === "object" || typeof from === "function")
+    __getOwnPropNames(from).map((key) => !__hasOwnProp.call(entry, key) && __defProp(entry, key, {
+      get: () => from[key],
+      enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+    }));
+  __moduleCache.set(from, entry);
+  return entry;
+};
 var __commonJS = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, {
+      get: all[name],
+      enumerable: true,
+      configurable: true,
+      set: (newValue) => all[name] = () => newValue
+    });
+};
+var __esm = (fn, res) => () => (fn && (res = fn(fn = 0)), res);
 var __require = /* @__PURE__ */ createRequire(import.meta.url);
 
 // node_modules/undici/lib/core/symbols.js
@@ -16788,8 +16816,34 @@ var require_eventsource = __commonJS((exports, module) => {
 });
 
 // node_modules/shlex/shlex.js
-var require_shlex = __commonJS((exports) => {
-  class Shlexer {
+var exports_shlex = {};
+__export(exports_shlex, {
+  split: () => split,
+  quote: () => quote,
+  join: () => join3
+});
+function split(s) {
+  return Array.from(new Shlexer(s));
+}
+function quote(s) {
+  if (s === "") {
+    return "''";
+  }
+  const unsafeRe = /[^\w@%\-+=:,./]/;
+  if (!unsafeRe.test(s)) {
+    return s;
+  }
+  return ("'" + s.replace(/('+)/g, `'"$1"'`) + "'").replace(/^''|''$/g, "");
+}
+function join3(args) {
+  if (!Array.isArray(args)) {
+    throw new TypeError("args should be an array");
+  }
+  return args.map(quote).join(" ");
+}
+var Shlexer;
+var init_shlex = __esm(() => {
+  Shlexer = class Shlexer {
     constructor(string) {
       this.i = 0;
       this.string = string;
@@ -16932,25 +16986,6 @@ var require_shlex = __commonJS((exports) => {
         token = (token || "") + char;
       }
     }
-  }
-  exports.split = function(s) {
-    return Array.from(new Shlexer(s));
-  };
-  exports.quote = function(s) {
-    if (s === "") {
-      return "''";
-    }
-    const unsafeRe = /[^\w@%\-+=:,./]/;
-    if (!unsafeRe.test(s)) {
-      return s;
-    }
-    return ("'" + s.replace(/('+)/g, `'"$1"'`) + "'").replace(/^''|''$/g, "");
-  };
-  exports.join = function(args) {
-    if (!Array.isArray(args)) {
-      throw new TypeError("args should be an array");
-    }
-    return args.map(exports.quote).join(" ");
   };
 });
 
@@ -18255,8 +18290,8 @@ function error(message, properties = {}) {
 
 // index.js
 var path4 = __require("path");
-var sh_join = require_shlex().join;
-var sh_split = require_shlex().split;
+var sh_join = (init_shlex(), __toCommonJS(exports_shlex)).join;
+var sh_split = (init_shlex(), __toCommonJS(exports_shlex)).split;
 async function run() {
   try {
     const runScript = getInput("run");
