@@ -1,14 +1,17 @@
+load("@rules_shell//shell:sh_library.bzl", "sh_library")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+
 def run_nix_shell_test(name, test_file = None, **kwargs):
     if test_file == None:
         test_file = "{}.sh".format(name)
 
     lib_name = name + "_library"
-    native.sh_library(
+    sh_library(
         name = lib_name,
         srcs = [test_file],
     )
 
-    native.sh_test(
+    sh_test(
         name = name,
         srcs = ["@run_nix_shell//tests/tools_tests:run_nix_shell_test_runner.sh"],
         args = [
