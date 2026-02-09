@@ -14,6 +14,11 @@ bazel_dep(
     dev_dependency = True,
 )
 
+bazel_dep(
+    name = "rules_shell",
+    version = "0.6.1"
+)
+
 nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo")
 nix_repo.file(
     name = "nixpkgs",
