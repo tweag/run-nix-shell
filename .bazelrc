@@ -1,5 +1,9 @@
 build --enable_bzlmod
 
+# strict action env is in effect, but the tests rely on being able to
+# locate `nix-shell` in PATH
+test --test_env=PATH
+
 # CI Configuration
 # ----------------
 common:ci --announce_rc
