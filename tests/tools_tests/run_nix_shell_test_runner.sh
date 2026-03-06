@@ -14,26 +14,21 @@ source "${RUNFILES_DIR:-/dev/null}/$f" 2>/dev/null || \
 
 # MARK - Locate Deps
 
-assertions_sh_location=cgrindel_bazel_starlib/shlib/lib/assertions.sh
-assertions_sh="$(rlocation "${assertions_sh_location}")" || \
-  (echo >&2 "Failed to locate ${assertions_sh_location}" && exit 1)
+assertions_sh="$(rlocation "${ASSERTIONS_SH_LOCATION}")" ||
+  (echo >&2 "Failed to locate ${ASSERTIONS_SH_LOCATION}" && exit 1)
 source "${assertions_sh}"
 
-run_nix_shell_sh_location=run_nix_shell/tools/run_nix_shell.sh
-run_nix_shell_sh="$(rlocation "${run_nix_shell_sh_location}")" || \
-  (echo >&2 "Failed to locate ${run_nix_shell_sh_location}" && exit 1)
+run_nix_shell_sh="$(rlocation "${RUN_NIX_SHELL_SH_LOCATION}")" ||
+  (echo >&2 "Failed to locate ${RUN_NIX_SHELL_SH_LOCATION}" && exit 1)
 
-flake_lock_location=run_nix_shell/flake.lock
-flake_lock="$(rlocation "${flake_lock_location}")" || \
-  (echo >&2 "Failed to locate ${flake_lock_location}" && exit 1)
+flake_lock="$(rlocation "${FLAKE_LOCK_LOCATION}")" ||
+  (echo >&2 "Failed to locate ${FLAKE_LOCK_LOCATION}" && exit 1)
 
-node_binary_location=nodejs/bin/node
-node_binary="$(rlocation "${node_binary_location}")" || \
-  (echo >&2 "Failed to locate ${node_binary_location}" && exit 1)
+node_binary="$(rlocation "${NODE_BINARY_LOCATION}")" ||
+  (echo >&2 "Failed to locate ${NODE_BINARY_LOCATION}" && exit 1)
 
-node_bundle_mjs_location=run_nix_shell/generated/bundle.mjs
-node_bundle_mjs="$(rlocation "${node_bundle_mjs_location}")" || \
-  (echo >&2 "Failed to locate ${node_bundle_mjs_location}" && exit 1)
+node_bundle_mjs="$(rlocation "${NODE_BUNDLE_MJS_LOCATION}")" ||
+  (echo >&2 "Failed to locate ${NODE_BUNDLE_MJS_LOCATION}" && exit 1)
 
 # MARK - Setup
 

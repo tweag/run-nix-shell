@@ -1,6 +1,9 @@
 load("@cgrindel_bazel_starlib//updatesrc:defs.bzl", "updatesrc_diff_and_update")
 
-# exports_files(["flake.lock"])
+exports_files(
+    ["flake.lock"],
+    visibility = ["//:__subpackages__"],
+)
 
 filegroup(
     name = "flake_files",
