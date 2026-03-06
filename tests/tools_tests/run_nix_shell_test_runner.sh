@@ -30,8 +30,12 @@ node_binary="$(rlocation "${NODE_BINARY_LOCATION}")" ||
 node_bundle_mjs="$(rlocation "${NODE_BUNDLE_MJS_LOCATION}")" ||
   (echo >&2 "Failed to locate ${NODE_BUNDLE_MJS_LOCATION}" && exit 1)
 
+nixpkgs_nix="$(rlocation "${NIXPKGS_NIX_LOCATION}")" ||
+  (echo >&2 "Failed to locate ${NIXPKGS_NIX_LOCATION}" && exit 1)
+
 # MARK - Setup
 
+export NIX_PATH="nixpkgs=$nixpkgs_nix"
 export NODE="$node_binary"
 export RNS_BUNDLE_MJS="$node_bundle_mjs"
 

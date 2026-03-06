@@ -17,6 +17,7 @@ def run_nix_shell_test(name, test_file = None, **kwargs):
     location_env = {
         "ASSERTIONS_SH_LOCATION": "@cgrindel_bazel_starlib//shlib/lib:assertions.sh",
         "FLAKE_LOCK_LOCATION": "//:flake.lock",
+        "NIXPKGS_NIX_LOCATION": "@nixpkgs//:nixpkgs.nix",
         "NODE_BINARY_LOCATION": "@nodejs//:bin/node",
         "NODE_BUNDLE_MJS_LOCATION": "//:dist",
         "RUN_NIX_SHELL_SH_LOCATION": "//tools:run_nix_shell",
