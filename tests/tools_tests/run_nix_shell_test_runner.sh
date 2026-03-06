@@ -16,8 +16,12 @@ source "${RUNFILES_DIR:-/dev/null}/$f" 2>/dev/null || \
 
 assertions_sh="$(rlocation "${ASSERTIONS_SH_LOCATION}")" ||
   (echo >&2 "Failed to locate ${ASSERTIONS_SH_LOCATION}" && exit 1)
+
+# shellcheck disable=SC1090
 source "${assertions_sh}"
 
+# the `run_nix_shell_sh` variable is used in the sourced test script
+# shellcheck disable=SC2034
 run_nix_shell_sh="$(rlocation "${RUN_NIX_SHELL_SH_LOCATION}")" ||
   (echo >&2 "Failed to locate ${RUN_NIX_SHELL_SH_LOCATION}" && exit 1)
 
@@ -61,4 +65,5 @@ EOF
 
 # MARK - Test
 
+# shellcheck disable=SC1090
 source "${1}"
