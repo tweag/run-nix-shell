@@ -5,15 +5,6 @@ exports_files(
     visibility = ["//:__subpackages__"],
 )
 
-filegroup(
-    name = "flake_files",
-    srcs = [
-        "flake.lock",
-        "flake.nix",
-    ],
-    visibility = ["//:__subpackages__"],
-)
-
 genrule(
     name = "dist",
     cmd = """
