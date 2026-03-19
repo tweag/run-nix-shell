@@ -16,13 +16,15 @@ inputs:
   working-directory:
     type: string
     description: |
-      The path where the script will be executed. This is not the path where nix-shell is executed.
+      The path where nix-shell is executed and the script will be executed.
     default: .
   derivation-path:
     type: string
     description: |
-      The path to directory or the shell.nix or default.nix to use to set up the environment. This
-      is the directory where nix-shell is executed.
+      The path to a directory containing shell.nix or default.nix; or a path to a .nix file to
+      use to set up the environment.
+
+      Note, the path is resolved relative to the project root.
   shell-flags:
     type: string
     default: set -o errexit -o nounset -o pipefail
