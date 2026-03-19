@@ -6,7 +6,7 @@ import {join as sh_join, split as sh_split } from "shlex";
 async function run() {
   try {
     // Get inputs
-    const runScript = core.getInput("run");
+    const runScript = core.getInput("run", {required: true});
     const pure = core.getBooleanInput("pure");
     const options = core.getInput("options");
     const workingDir = core.getInput("working-directory");
