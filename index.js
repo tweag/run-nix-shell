@@ -1,8 +1,7 @@
 import * as core from "@actions/core";
 import * as exec from "@actions/exec";
-const path = require("path");
-const sh_join = require("shlex").join;
-const sh_split = require("shlex").split;
+import * as path from "node:path";
+import {join as sh_join, split as sh_split } from "shlex";
 
 async function run() {
   try {
