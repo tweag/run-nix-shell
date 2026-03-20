@@ -1,33 +1,5 @@
 import { createRequire } from "node:module";
-var __defProp = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __moduleCache = /* @__PURE__ */ new WeakMap;
-var __toCommonJS = (from) => {
-  var entry = __moduleCache.get(from), desc;
-  if (entry)
-    return entry;
-  entry = __defProp({}, "__esModule", { value: true });
-  if (from && typeof from === "object" || typeof from === "function")
-    __getOwnPropNames(from).map((key) => !__hasOwnProp.call(entry, key) && __defProp(entry, key, {
-      get: () => from[key],
-      enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
-    }));
-  __moduleCache.set(from, entry);
-  return entry;
-};
 var __commonJS = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, {
-      get: all[name],
-      enumerable: true,
-      configurable: true,
-      set: (newValue) => all[name] = () => newValue
-    });
-};
-var __esm = (fn, res) => () => (fn && (res = fn(fn = 0)), res);
 var __require = /* @__PURE__ */ createRequire(import.meta.url);
 
 // node_modules/undici/lib/core/symbols.js
@@ -16815,180 +16787,6 @@ var require_eventsource = __commonJS((exports, module) => {
   };
 });
 
-// node_modules/shlex/shlex.js
-var exports_shlex = {};
-__export(exports_shlex, {
-  split: () => split,
-  quote: () => quote,
-  join: () => join3
-});
-function split(s) {
-  return Array.from(new Shlexer(s));
-}
-function quote(s) {
-  if (s === "") {
-    return "''";
-  }
-  const unsafeRe = /[^\w@%\-+=:,./]/;
-  if (!unsafeRe.test(s)) {
-    return s;
-  }
-  return ("'" + s.replace(/('+)/g, `'"$1"'`) + "'").replace(/^''|''$/g, "");
-}
-function join3(args) {
-  if (!Array.isArray(args)) {
-    throw new TypeError("args should be an array");
-  }
-  return args.map(quote).join(" ");
-}
-var Shlexer;
-var init_shlex = __esm(() => {
-  Shlexer = class Shlexer {
-    constructor(string) {
-      this.i = 0;
-      this.string = string;
-      this.whitespace = ` 	\r
-`;
-      this.quotes = `'"`;
-      this.escapes = "\\";
-      this.escapedQuotes = '"';
-      this.ansiCQuotes = true;
-      this.localeQuotes = true;
-      this.debug = false;
-    }
-    readChar() {
-      return this.string.charAt(this.i++);
-    }
-    processEscapes(string, quote, isAnsiCQuote) {
-      if (!isAnsiCQuote && !this.escapedQuotes.includes(quote)) {
-        return string;
-      }
-      const anyEscape = "[" + this.escapes.replace(/(.)/g, "\\$1") + "]";
-      if (!isAnsiCQuote && this.escapedQuotes.includes(quote)) {
-        const re = new RegExp(anyEscape + "(" + anyEscape + "|\\" + quote + ")", "g");
-        return string.replace(re, "$1");
-      }
-      if (isAnsiCQuote) {
-        const patterns = {
-          "([\\\\'\"?])": (x) => x,
-          a: () => "\x07",
-          b: () => "\b",
-          "e|E": () => "\x1B",
-          f: () => "\f",
-          n: () => `
-`,
-          r: () => "\r",
-          t: () => "\t",
-          v: () => "\v",
-          "([0-7]{1,3})": (x) => String.fromCharCode(parseInt(x, 8)),
-          "x([0-9a-fA-F]{1,2})": (x) => String.fromCharCode(parseInt(x, 16)),
-          "u([0-9a-fA-F]{1,4})": (x) => String.fromCharCode(parseInt(x, 16)),
-          "U([0-9a-fA-F]{1,8})": (x) => String.fromCharCode(parseInt(x, 16)),
-          "c(.)": (x) => {
-            if (x === "?") {
-              return "";
-            } else if (x === "@") {
-              return "\x00";
-            } else {
-              return String.fromCharCode(x.charCodeAt(0) & 31);
-            }
-          }
-        };
-        const re = new RegExp(anyEscape + "(" + Object.keys(patterns).join("|") + ")", "g");
-        return string.replace(re, function(m, p1) {
-          for (const matched in patterns) {
-            const mm = new RegExp("^" + matched + "$").exec(p1);
-            if (mm === null) {
-              continue;
-            }
-            return patterns[matched].apply(null, mm.slice(1));
-          }
-        });
-      }
-      return;
-    }
-    *[Symbol.iterator]() {
-      let inQuote = false;
-      let inDollarQuote = false;
-      let escaped = false;
-      let lastDollar = -2;
-      let token;
-      if (this.debug) {
-        console.log("full input:", ">" + this.string + "<");
-      }
-      while (true) {
-        const pos = this.i;
-        const char = this.readChar();
-        if (this.debug) {
-          console.log("position:", pos, "input:", ">" + char + "<", "accumulated:", token, "inQuote:", inQuote, "inDollarQuote:", inDollarQuote, "lastDollar:", lastDollar, "escaped:", escaped);
-        }
-        if (char === "") {
-          if (inQuote) {
-            throw new Error("Got EOF while in a quoted string");
-          }
-          if (escaped) {
-            throw new Error("Got EOF while in an escape sequence");
-          }
-          if (token !== undefined) {
-            yield token;
-          }
-          return;
-        }
-        if (escaped) {
-          if (char === `
-`) {} else if (inQuote) {
-            token = (token || "") + escaped + char;
-          } else {
-            token = (token || "") + char;
-          }
-          escaped = false;
-          continue;
-        }
-        if (this.escapes.includes(char)) {
-          if (!inQuote || inDollarQuote !== false || this.escapedQuotes.includes(inQuote)) {
-            escaped = char;
-            continue;
-          } else {}
-        }
-        if (inQuote !== false) {
-          if (char === inQuote) {
-            token = this.processEscapes(token, inQuote, inDollarQuote === "'");
-            inQuote = false;
-            inDollarQuote = false;
-            continue;
-          }
-          token = (token || "") + char;
-          continue;
-        }
-        if (this.quotes.includes(char)) {
-          inQuote = char;
-          if (lastDollar === pos - 1) {
-            if (char === "'" && !this.ansiCQuotes) {} else if (char === '"' && !this.localeQuotes) {} else {
-              inDollarQuote = char;
-            }
-          }
-          token = token || "";
-          if (inDollarQuote !== false) {
-            token = token.slice(0, -1);
-          }
-          continue;
-        }
-        if (inQuote === false && char === "$") {
-          lastDollar = pos;
-        }
-        if (this.whitespace.includes(char)) {
-          if (token !== undefined) {
-            yield token;
-          }
-          token = undefined;
-          continue;
-        }
-        token = (token || "") + char;
-      }
-    }
-  };
-});
-
 // node_modules/@actions/core/lib/command.js
 import * as os from "os";
 
@@ -18289,12 +18087,177 @@ function error(message, properties = {}) {
 }
 
 // index.js
-var path4 = __require("path");
-var sh_join = (init_shlex(), __toCommonJS(exports_shlex)).join;
-var sh_split = (init_shlex(), __toCommonJS(exports_shlex)).split;
+import * as path4 from "node:path";
+
+// node_modules/shlex/shlex.js
+class Shlexer {
+  constructor(string) {
+    this.i = 0;
+    this.string = string;
+    this.whitespace = ` 	\r
+`;
+    this.quotes = `'"`;
+    this.escapes = "\\";
+    this.escapedQuotes = '"';
+    this.ansiCQuotes = true;
+    this.localeQuotes = true;
+    this.debug = false;
+  }
+  readChar() {
+    return this.string.charAt(this.i++);
+  }
+  processEscapes(string, quote, isAnsiCQuote) {
+    if (!isAnsiCQuote && !this.escapedQuotes.includes(quote)) {
+      return string;
+    }
+    const anyEscape = "[" + this.escapes.replace(/(.)/g, "\\$1") + "]";
+    if (!isAnsiCQuote && this.escapedQuotes.includes(quote)) {
+      const re = new RegExp(anyEscape + "(" + anyEscape + "|\\" + quote + ")", "g");
+      return string.replace(re, "$1");
+    }
+    if (isAnsiCQuote) {
+      const patterns = {
+        "([\\\\'\"?])": (x) => x,
+        a: () => "\x07",
+        b: () => "\b",
+        "e|E": () => "\x1B",
+        f: () => "\f",
+        n: () => `
+`,
+        r: () => "\r",
+        t: () => "\t",
+        v: () => "\v",
+        "([0-7]{1,3})": (x) => String.fromCharCode(parseInt(x, 8)),
+        "x([0-9a-fA-F]{1,2})": (x) => String.fromCharCode(parseInt(x, 16)),
+        "u([0-9a-fA-F]{1,4})": (x) => String.fromCharCode(parseInt(x, 16)),
+        "U([0-9a-fA-F]{1,8})": (x) => String.fromCharCode(parseInt(x, 16)),
+        "c(.)": (x) => {
+          if (x === "?") {
+            return "";
+          } else if (x === "@") {
+            return "\x00";
+          } else {
+            return String.fromCharCode(x.charCodeAt(0) & 31);
+          }
+        }
+      };
+      const re = new RegExp(anyEscape + "(" + Object.keys(patterns).join("|") + ")", "g");
+      return string.replace(re, function(m, p1) {
+        for (const matched in patterns) {
+          const mm = new RegExp("^" + matched + "$").exec(p1);
+          if (mm === null) {
+            continue;
+          }
+          return patterns[matched].apply(null, mm.slice(1));
+        }
+      });
+    }
+    return;
+  }
+  *[Symbol.iterator]() {
+    let inQuote = false;
+    let inDollarQuote = false;
+    let escaped = false;
+    let lastDollar = -2;
+    let token;
+    if (this.debug) {
+      console.log("full input:", ">" + this.string + "<");
+    }
+    while (true) {
+      const pos = this.i;
+      const char = this.readChar();
+      if (this.debug) {
+        console.log("position:", pos, "input:", ">" + char + "<", "accumulated:", token, "inQuote:", inQuote, "inDollarQuote:", inDollarQuote, "lastDollar:", lastDollar, "escaped:", escaped);
+      }
+      if (char === "") {
+        if (inQuote) {
+          throw new Error("Got EOF while in a quoted string");
+        }
+        if (escaped) {
+          throw new Error("Got EOF while in an escape sequence");
+        }
+        if (token !== undefined) {
+          yield token;
+        }
+        return;
+      }
+      if (escaped) {
+        if (char === `
+`) {} else if (inQuote) {
+          token = (token || "") + escaped + char;
+        } else {
+          token = (token || "") + char;
+        }
+        escaped = false;
+        continue;
+      }
+      if (this.escapes.includes(char)) {
+        if (!inQuote || inDollarQuote !== false || this.escapedQuotes.includes(inQuote)) {
+          escaped = char;
+          continue;
+        } else {}
+      }
+      if (inQuote !== false) {
+        if (char === inQuote) {
+          token = this.processEscapes(token, inQuote, inDollarQuote === "'");
+          inQuote = false;
+          inDollarQuote = false;
+          continue;
+        }
+        token = (token || "") + char;
+        continue;
+      }
+      if (this.quotes.includes(char)) {
+        inQuote = char;
+        if (lastDollar === pos - 1) {
+          if (char === "'" && !this.ansiCQuotes) {} else if (char === '"' && !this.localeQuotes) {} else {
+            inDollarQuote = char;
+          }
+        }
+        token = token || "";
+        if (inDollarQuote !== false) {
+          token = token.slice(0, -1);
+        }
+        continue;
+      }
+      if (inQuote === false && char === "$") {
+        lastDollar = pos;
+      }
+      if (this.whitespace.includes(char)) {
+        if (token !== undefined) {
+          yield token;
+        }
+        token = undefined;
+        continue;
+      }
+      token = (token || "") + char;
+    }
+  }
+}
+function split(s) {
+  return Array.from(new Shlexer(s));
+}
+function quote(s) {
+  if (s === "") {
+    return "''";
+  }
+  const unsafeRe = /[^\w@%\-+=:,./]/;
+  if (!unsafeRe.test(s)) {
+    return s;
+  }
+  return ("'" + s.replace(/('+)/g, `'"$1"'`) + "'").replace(/^''|''$/g, "");
+}
+function join3(args) {
+  if (!Array.isArray(args)) {
+    throw new TypeError("args should be an array");
+  }
+  return args.map(quote).join(" ");
+}
+
+// index.js
 async function run() {
   try {
-    const runScript = getInput("run");
+    const runScript = getInput("run", { required: true });
     const pure = getBooleanInput("pure");
     const options = getInput("options");
     const workingDir = getInput("working-directory");
@@ -18312,7 +18275,7 @@ ${runScript}`;
       nixShellArgs.unshift("--pure");
     }
     if (options) {
-      nixShellArgs.unshift(...sh_split(options));
+      nixShellArgs.unshift(...split(options));
     }
     const execOptions = {
       silent: true,
@@ -18325,7 +18288,7 @@ ${runScript}`;
       execOptions["cwd"] = path4.resolve(workingDir);
     }
     if (verbose) {
-      console.error(`nix-shell ${sh_join(nixShellArgs)}`);
+      console.error(`nix-shell ${join3(nixShellArgs)}`);
     }
     const exitCode = await exec("nix-shell", nixShellArgs, execOptions);
     if (exitCode !== 0) {
