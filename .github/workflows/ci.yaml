@@ -26,6 +26,21 @@ jobs:
       - uses: ./.github/actions/set_up_runner
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: bazelisk cache
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        with:
+          path: ${{ case(runner.os == 'Linux', '~/.cache/bazelisk', '~/Library/Caches/bazelisk') }}
+          key: bazelisk-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.bazelversion') }}
+      - name: bazel repository cache
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        with:
+          path: ~/.cache/bazel-repo
+          key: bazel-repo-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.bazelversion', 'MODULE.bazel', 'MODULE.bazel.lock') }}
+      - name: bazel repository cache config
+        run: |
+          cat >>.bazelrc.local <<EOF
+          common --repository_cache=~/.cache/bazel-repo
+          EOF
       - name: Execute Bazel tests
         shell: bash
         run: bazel test //...
