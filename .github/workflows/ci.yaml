@@ -55,6 +55,10 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # check out the complete history because
+          # shallow clones fail the tests, see https://github.com/NixOS/flake-compat/issues/95
+          fetch-depth: 0
       - uses: ./.github/actions/set_up_runner
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

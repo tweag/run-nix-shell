@@ -6,7 +6,7 @@
     # https://nixos.wiki/wiki/Flakes#Using_flakes_with_stable_Nix
     # used in tests/integration_tests/shell.nix
     flake-compat = {
-      url = "github:edolstra/flake-compat";
+      url = "github:NixOS/flake-compat";
       flake = false;
     };
   };
